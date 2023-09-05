@@ -40,9 +40,9 @@ jobs:
             using NodeJS; run(`$(npm_cmd()) install highlight.js`);
             run(`$(npm_cmd()) install lunr`);
             run(`$(npm_cmd()) install cheerio`);
-            using Franklin;
-            lunr();
+            using Franklin; serve(single=true); lunr();
             optimize()'
+
     - name: Build and Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
