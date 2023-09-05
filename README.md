@@ -1,6 +1,6 @@
 ## Introduction to Gridap: Simulating PDEs using finite elements in Julia
 
-👉 [**Go to course website**](https://gridap.github.io/GridapWorkshopNCI2023)
+👉 [**Go to course website**](https://gridap.github.io/GridapWorkshopNCI2023) 
 
 Welcome to **Introduction to Gridap: Simulating PDEs using finite elements in Julia ✨ 28-29th, Nov, 2023**
 
