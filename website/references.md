@@ -15,7 +15,7 @@ hascode = false
 
 ## Books
 
-- [TBA]()
+- [Numerical Solution of Partial Differential Equations by the Finite Element Method](https://www.amazon.com/Numerical-Solution-Differential-Equations-Mathematics/dp/048646900X)
 
 _any further relevant suggestions are welcome - open a PR_
 
