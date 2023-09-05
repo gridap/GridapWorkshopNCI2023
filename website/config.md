@@ -4,7 +4,7 @@ The website_* must be defined for the RSS to work
 -->
 @def website_title = "Introduction to Gridap: Simulating PDEs using finite elements in Julia"
 @def website_descr = "Website for the Gridap Workshop at NCI, Nov, 2023"
-@def website_url   = "https://gridap.github.io/GridapWorkshopNCI2023"
+@def website_url   = "https://gridap.github.io/GridapWorkshopNCI2023/"
 
 @def author = "ANU - Alberto F. Martin"
 
