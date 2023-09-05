@@ -1,0 +1,37 @@
++++
+title = "References"
+hascode = false
++++
+
+# References
+
+<!-- \toc -->
+
+## Cheatsheets
+
+- [Fastrack to Julia](https://juliadocs.github.io/Julia-Cheat-Sheet/) cheatsheet
+- [MATLAB-Julia-Python comparative](https://cheatsheets.quantecon.org/) cheatsheet (by [QuantEcon group](https://quantecon.org/))
+- [Plots.jl](https://github.com/sswatson/cheatsheets/blob/master/plotsjl-cheatsheet.pdf) cheatsheet
+
+## Books
+
+- [TBA]()
+
+_any further relevant suggestions are welcome - open a PR_
+
+## Extra material 
+
+### Repositories
+
+- [Gridap.jl](https://github.com/gridap/Gridap.jl)
+- [GridapDistributed.jl](https://github.com/gridap/GridapDistributed.jl)
+- [Gridap Tutorials](https://github.com/gridap/Tutorials)
+- [Plots.jl](https://github.com/JuliaPlots/Plots.jl)
+- [Revise.jl](https://github.com/timholy/Revise.jl)
+
+### Other resources
+
+- [Julia language](https://julialang.org) main website
+- [Julia Discourse](https://discourse.julialang.org/) (Q&A - help)
+- [JuliaHub: Package search](https://juliahub.com/ui/Packages)
+
