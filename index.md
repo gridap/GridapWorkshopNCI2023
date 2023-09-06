@@ -8,7 +8,7 @@ title = "Introduction to Gridap: Simulating PDEs using finite elements in Julia"
 
 🎉 Welcome to the webpage of the workshop **"Introduction to Gridap: Simulating PDEs using finite elements in Julia"**.
 
-The workshop will be cellebrated at the Australian National University (ANU), Canberra, 
+The workshop will be celebrated at the Australian National University (ANU), Canberra, 
 the 28th and 29th of November, 2023.
 
 @@im-100

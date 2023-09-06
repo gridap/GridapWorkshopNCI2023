@@ -34,4 +34,5 @@ _any further relevant suggestions are welcome - open a PR_
 - [Julia language](https://julialang.org) main website
 - [Julia Discourse](https://discourse.julialang.org/) (Q&A - help)
 - [JuliaHub: Package search](https://juliahub.com/ui/Packages)
+- [NCI Gadi user guide](https://opus.nci.org.au/display/Help/Gadi+User+Guide)
 
