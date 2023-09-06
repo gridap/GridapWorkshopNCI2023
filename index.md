@@ -33,7 +33,8 @@ The workshop will be tutorial-based and will cover the main features of Gridap, 
 
 The emphasis will be mainly on presenting the main software abstractions underlying these packages and how these can be combined to solve a variety of PDEs with application to different problems in science and engineering.  The choice of the PDE systems to be discussed in the workshop will be based on the participant's interests gathered during registration.  
 
-Funding is available to cover the accommodation and travel expenses of research students. Participants must bring their own laptops. Instructions will be provided to install the software before the actual workshop takes place.
+**Participants must bring their own laptops**. Instructions to install the software are available [here](/software_install/). **These should
+be followed before the actual workshop takes place.**
 
 ### Outline
 - **Part 1**  _Introduction to finite element methods_

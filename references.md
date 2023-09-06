@@ -16,7 +16,7 @@ hascode = false
 ## Books and lecture notes
 
 - [Numerical Solution of Partial Differential Equations by the Finite Element Method by Claes Johnson](https://www.amazon.com/Numerical-Solution-Differential-Equations-Mathematics/dp/048646900X)
-- [TBA]()
+- [A gentle introduction to the Finite Element Method by Francisco-Javier Sayas](https://team-pancho.github.io/documents/anIntro2FEM_2015.pdf)
 
 ## Extra material 
 
