@@ -23,6 +23,6 @@ Course material, exercises and extra resources are available on the [**course we
 ---
 
 _**Admin**_
-- [website-admin-instructions](website-admin-instructions) document
+- [website-admin-instructions](website-admin-instructions.md) document
 
 _This event is supported by the School of Computing and its Computational Science Cluster at the Australian National University, NCI Australia and Monash University._
