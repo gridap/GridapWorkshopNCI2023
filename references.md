@@ -13,10 +13,10 @@ hascode = false
 - [MATLAB-Julia-Python comparative](https://cheatsheets.quantecon.org/) cheatsheet (by [QuantEcon group](https://quantecon.org/))
 - [Plots.jl](https://github.com/sswatson/cheatsheets/blob/master/plotsjl-cheatsheet.pdf) cheatsheet
 
-## Books
+## Books and lecture notes
 
-- [Numerical Solution of Partial Differential Equations by the Finite Element Method, Claes Johnson](https://www.amazon.com/Numerical-Solution-Differential-Equations-Mathematics/dp/048646900X)
-
+- [Numerical Solution of Partial Differential Equations by the Finite Element Method by Claes Johnson](https://www.amazon.com/Numerical-Solution-Differential-Equations-Mathematics/dp/048646900X)
+- [TBA]()
 
 ## Extra material 
 

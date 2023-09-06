@@ -11,9 +11,11 @@ title = "Introduction to Gridap: Simulating PDEs using finite elements in Julia"
 The workshop will be celebrated at the Australian National University (ANU), Canberra, 
 the 28th and 29th of November, 2023.
 
-@@im-100
-![](/assets/NSWE_48x48_1_trapezoidal_dt_480_tau_dtdiv2.gif)
-@@
+~~~
+<center>
+  <video width="65%" autoplay loop controls src="/assets/NSWE_48x48_1_trapezoidal_dt_480_tau_dtdiv2.mp4"/>
+</center>
+~~~
 
 _This event is supported by the [School of Computing](https://comp.anu.edu.au/) and its [Computational Science Cluster](https://comp.anu.edu.au/research/clusters/computational-science/) at the Australian National University, [NCI Australia](https://nci.org.au/) and Monash University._
 
