@@ -20,6 +20,10 @@ hascode = false
 
 ## Extra material 
 
+## Complementary courses 
+
+- [Julia for HPC course from ENCCS (Sweden)](https://enccs.github.io/julia-for-hpc/)
+
 ### Repositories
 
 - [Gridap.jl](https://github.com/gridap/Gridap.jl)
