@@ -150,6 +150,21 @@ https://www.w3schools.com/colors/colors_picker.asp
 
 ## Additional notes
 
-La idea principal es la siguiente:
-* `GridapWorkshopMaterials` contiene una carpeta `src` con los codigos fully-annotated. En ese repo tambien hay un script que genera notebooks y scripts sin anotations para los participantes.
-* `GridapWorkshopNCI2023` contiene a `GridapWorkshopMaterials` como submodule dentro de una carpeta workshop-materials. Tambien tiene un script `process_materials.jl` que mira en la carpeta workshop-materials/src y crea los scripts que Franklin usa.
+The scripts have been moved to `GridapWorkshop2023Material`, which is listed in this repo as a submodule in `workshop-materials`. This allows for the following:
+
+* The fully-annotated scripts are in `workshop-materials/src`. These scripts can be processed to generate the different tutorial formats. 
+* The script `workshop-materials/src/_build.jl` parses the scripts and generates
+  * a jupyter notebook version in `workshop-materials/notebooks`.
+  * a stripped script version in `workshop-materials/scripts`.
+* The script `process_materials.jl` parses the scripts and generates the `.jl` files in the folder `_literate`, which can then be included by Franklin.jl. 
+
+Changes pushed to the submodule will not be seen by this repository (since the submodule is pinned to a specific commit). To update the submodule, do the following:
+
+```bash
+git submodule update --remote
+git add .
+git commit -m "git submodule updated"
+git push origin main
+```
+
+Alternatively, one can work locally from this repo, doing changes to both repositories then commiting and pushing the changes to both repos.
