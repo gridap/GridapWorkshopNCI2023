@@ -38,4 +38,3 @@ hascode = false
 - [Julia Discourse](https://discourse.julialang.org/) (Q&A - help)
 - [JuliaHub: Package search](https://juliahub.com/ui/Packages)
 - [NCI Gadi user guide](https://opus.nci.org.au/display/Help/Gadi+User+Guide)
-

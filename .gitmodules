@@ -1,0 +1,3 @@
+[submodule "workshop-materials"]
+	path = workshop-materials
+	url = git@github.com:gridap/GridapWorkshop2023Material.git
