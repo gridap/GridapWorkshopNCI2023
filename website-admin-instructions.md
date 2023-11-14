@@ -147,3 +147,9 @@ Put in `_layout/head` the following, before the opening of the body and after th
 ### HTML color-picker
 
 https://www.w3schools.com/colors/colors_picker.asp
+
+## Additional notes
+
+La idea principal es la siguiente:
+* `GridapWorkshopMaterials` contiene una carpeta `src` con los codigos fully-annotated. En ese repo tambien hay un script que genera notebooks y scripts sin anotations para los participantes.
+* `GridapWorkshopNCI2023` contiene a `GridapWorkshopMaterials` como submodule dentro de una carpeta workshop-materials. Tambien tiene un script `process_materials.jl` que mira en la carpeta workshop-materials/src y crea los scripts que Franklin usa.
