@@ -1,9 +1,11 @@
 +++
-title = "Grants"
+title = "Registration and Grants"
 hascode = false
 +++
 
-# Registration 
+# Registration (SOLD OUT)
+
+**UPDATE**: Unfortunately, we are **SOLD OUT**. Thanks for your interest in participating!
 
 If you are interested in participating, 
 apply [here](https://docs.google.com/forms/d/1kA7bozLmHlX5iX4BhGjRNoYKn770ZmM3CMFj6_qlSdU/edit?ts=64f6b916)
