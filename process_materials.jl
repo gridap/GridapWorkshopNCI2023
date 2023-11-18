@@ -1,13 +1,16 @@
 using Literate
 ## include Literate scripts starting with following 2 letters in the deploy
-incl = "l10"
+incl = ""
 ## Set `sol=true` to produce output with solutions contained and hints stripts. Otherwise the other way around.
 sol = false
 ##
+src_dir = string(@__DIR__,"/workshop-materials/src/")
+fig_dir = string(@__DIR__,"/workshop-materials/figures/")
+out_dir = string(@__DIR__,"/_literate/")
 
 function replace_string(str)
         strn = str
-        for st in ["./figures/" => "../assets/literate_figures/"]
+        for st in ["../figures/" => "../assets/literate_figures/"]
             strn = replace(strn, st)
         end
     return strn
@@ -55,40 +58,23 @@ function rm_hint(str)
     return str
 end
 
-for fl in readdir()
-    if splitext(fl)[end]!=".jl" || splitpath(@__FILE__)[end]==fl || !occursin(incl, fl)
+mkpath("_literate")
+for fl in readdir(src_dir)
+    if splitext(fl)[end]!=".jl" || fl=="_deploy.jl" || !occursin(incl, fl)
         continue
     end
 
-    println("File: $fl")
-
-    # create ipynb
-    if sol
-        Literate.notebook(fl, "notebooks", credit=false, execute=false, mdstrings=true, preprocess=rm_hint)
-    else
-        Literate.notebook(fl, "notebooks", credit=false, execute=false, mdstrings=true, preprocess=rm_sol)
-    end
-
-    # duplicate .jl scripts and rename them for web deploy
-    tmp = splitext(fl)[1] * "_web.jl"
-    cp("$fl", tmp, force=true)
-
-    str  = read(tmp, String)
+    str  = read(string(src_dir,fl), String)
     strn = replace_string(str)
     if sol
         strn2 = rm_hint(strn)
     else
         strn2 = rm_sol(strn)
     end
-    write(tmp, strn2)
-
-    mv("$tmp", "../_literate/$tmp", force=true)
+    out_fl = string(out_dir,fl)
+    write(out_fl, strn2)
 end
 
-# copy figures for ipynb
-mkpath("notebooks/figures")
-[cp("figures/$fl", "notebooks/figures/$fl", force=true) for fl in readdir("figures/")]
-
 # copy literate figures
-mkpath("../_assets/literate_figures")
-[cp("figures/$fl", "../_assets/literate_figures/$fl", force=true) for fl in readdir("figures/")]
+#mkpath("../_assets/literate_figures")
+#[cp(string(fig_dir,fl), "_assets/literate_figures/$fl", force=true) for fl in readdir(fig_dir)]

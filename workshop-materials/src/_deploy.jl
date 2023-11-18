@@ -1,9 +1,11 @@
 using Literate
 ## include Literate scripts starting with following letters in the deploy
-incl = "lecture10"
+incl = ""
 ## Set `sol=true` to produce output with solutions contained and hints stripts. Otherwise the other way around.
-sol = false
+sol = true
 ##
+notebooks_folder = "../notebooks"
+scripts_folder = "../scripts"
 
 function replace_string(str)
         strn = str
@@ -45,7 +47,7 @@ end
 "Use as `preproces` function to remove `#sol`-lines & just remote `#tag`-tag"
 function rm_sol(str)
     str = process_hashtag(str, "#sol=", line->"")
-    str = process_hashtag(str, "#hint=", line->line * "\n")
+    str = process_hashtag(str, "#hint=", line->"#" * line * "\n")
     return str
 end
 "Use as `preproces` function to remove `#hint`-lines & just remote `#sol`-tag"
@@ -60,35 +62,13 @@ for fl in readdir()
         continue
     end
 
-    println("File: $fl")
-
-    # create ipynb
+    # Render
+    Literate.notebook(fl, notebooks_folder, credit=false, execute=false, mdstrings=true, preprocess=rm_sol)
+    Literate.script(fl, scripts_folder, credit=false, execute=false, mdstrings=true, preprocess=rm_sol)
     if sol
-        Literate.notebook(fl, "notebooks", credit=false, execute=false, mdstrings=true, preprocess=rm_hint)
-    else
-        Literate.notebook(fl, "notebooks", credit=false, execute=false, mdstrings=true, preprocess=rm_sol)
+        notebooks_sol_folder = string(notebooks_folder,"-solutions")
+        scripts_sol_folder = string(scripts_folder,"-solutions")
+        Literate.notebook(fl, notebooks_sol_folder, credit=false, execute=false, mdstrings=true, preprocess=rm_hint)
+        Literate.script(fl, scripts_sol_folder, credit=false, execute=false, mdstrings=true, preprocess=rm_hint)
     end
-
-    # duplicate .jl scripts and rename them for web deploy
-    tmp = splitext(fl)[1] * "_web.jl"
-    cp("$fl", tmp, force=true)
-
-    str  = read(tmp, String)
-    strn = replace_string(str)
-    if sol
-        strn2 = rm_hint(strn)
-    else
-        strn2 = rm_sol(strn)
-    end
-    write(tmp, strn2)
-
-    mv("$tmp", "../_literate/$tmp", force=true)
 end
-
-# copy figures for ipynb
-mkpath("notebooks/figures")
-[cp("figures/$fl", "notebooks/figures/$fl", force=true) for fl in readdir("figures/")]
-
-# copy literate figures
-mkpath("../_assets/literate_figures")
-[cp("figures/$fl", "../_assets/literate_figures/$fl", force=true) for fl in readdir("figures/")]
