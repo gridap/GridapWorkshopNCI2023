@@ -5,11 +5,10 @@ hascode = false
 
 # Registration (SOLD OUT)
 
-**UPDATE**: Unfortunately, we are **SOLD OUT**. Thanks for your interest in participating!
+**UPDATE** (19/11/23): Unfortunately, we are **SOLD OUT**. Thanks for your interest in participating!
 
-If you are interested in participating, 
-apply [here](https://docs.google.com/forms/d/1kA7bozLmHlX5iX4BhGjRNoYKn770ZmM3CMFj6_qlSdU/edit?ts=64f6b916)
-before the deadline: **26th, Nov, 2023**.
+~~~<p><s>If you are interested in participating, 
+apply here before the deadline: <b>26th, Nov, 2023</b>.</s></p>~~~
 
 There are, however, only a limited number of seats available, so that the earlier you apply, the better.
 
