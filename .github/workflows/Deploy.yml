@@ -12,6 +12,10 @@ jobs:
       uses: actions/checkout@v2
       with:
         persist-credentials: false
+    - name: Update submodules
+      run: |
+          git submodule update --init --recursive 
+           
     # NOTE: Python is necessary for the pre-rendering (minification) step
     - name: Install python
       uses: actions/setup-python@v2
