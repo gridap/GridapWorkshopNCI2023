@@ -6,3 +6,4 @@ node_modules/
 Manifest.toml
 package-lock.json
 package.json
+software_install.md
