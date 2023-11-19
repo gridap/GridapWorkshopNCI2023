@@ -4,4 +4,4 @@ title = "Poisson tutorial"
 
 # Poisson tutorial
 
-\literate{/_literate/poisson_dist.jl}
+\literate{/_literate/T1_poisson.jl}
