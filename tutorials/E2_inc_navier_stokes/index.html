@@ -1,0 +1,110 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <script src="/GridapWorkshopNCI2023/libs/lunr/lunr.min.js"></script> <script src="/GridapWorkshopNCI2023/libs/lunr/lunr_index.js"></script> <script src="/GridapWorkshopNCI2023/libs/lunr/lunrclient.min.js"></script> <link rel=stylesheet  href="/GridapWorkshopNCI2023/libs/katex/katex.min.css"> <link rel=stylesheet  href="/GridapWorkshopNCI2023/libs/highlight/github.min.css"> <link rel=stylesheet  href="/GridapWorkshopNCI2023/css/franklin.css"> <link rel=stylesheet  href="/GridapWorkshopNCI2023/css/poole_hyde.css"> <link rel=stylesheet  href="/GridapWorkshopNCI2023/css/custom.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=apple-touch-icon  sizes=152x152  href="/GridapWorkshopNCI2023/assets/favicon/apple-touch-icon.png"> <link rel=icon  type="image/png" sizes=32x32  href="/GridapWorkshopNCI2023/assets/favicon/favicon-32x32.png"> <link rel=icon  type="image/png" sizes=16x16  href="/GridapWorkshopNCI2023/assets/favicon/favicon-16x16.png"> <link rel=manifest  href="/GridapWorkshopNCI2023/assets/favicon/site.webmanifest"> <link rel=mask-icon  href="/GridapWorkshopNCI2023/assets/favicon/safari-pinned-tab.svg" color="#5bbad5"> <meta name=msapplication-TileColor  content="#da532c"> <meta name=theme-color  content="#ffffff"> <title>Incompressible Navier-Stokes Tutorial</title> <style> .content {max-width: 60rem} </style> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <img src="/GridapWorkshopNCI2023/assets/logos.png" style="width: 500px; height: auto; display: inline"> <div style="font-weight: margin-bottom: 0.5em"><a href="/GridapWorkshopNCI2023/">28-29th, November, 2023</a> <span style="opacity: 0.9;">| Australian National University, Canberra</span></div> <br> <h1><a href="/GridapWorkshopNCI2023/">Introduction to Gridap: Simulating PDEs using finite elements in Julia</a></h1> <div style="line-height:18px; font-size: 15px; opacity: 0.85">by &nbsp; <a href="https://research.monash.edu/en/persons/santiago-badia">Santiago Badia</a>, &nbsp; <a href="https://amartinhuertas.github.io/">Alberto F. Martin</a>, &nbsp; <a href="https://github.com/JordiManyer">Jordi Manyer</a> </div> </div> <br> <style> </style> <nav class=sidebar-nav  style="opacity: 0.9; margin-bottom: 1.2cm;"> <a class="sidebar-nav-item " href="/GridapWorkshopNCI2023/"><b>Welcome</b></a> <a class="sidebar-nav-item " href="/GridapWorkshopNCI2023/software_install/">Software install instructions</a> <a class="sidebar-nav-item " href="/GridapWorkshopNCI2023/tutorials/">Tutorials</a> <a class="sidebar-nav-item " href="/GridapWorkshopNCI2023/references/">References</a> <a class="sidebar-nav-item " href="/GridapWorkshopNCI2023/grants/">Registration and grants for research students</a> <a class="sidebar-nav-item " href="/GridapWorkshopNCI2023/flyer/">Event Flyer</a> <br> <div class=course-section >Part 1 - Introduction to the finite element method</div> <a class="sidebar-nav-item " href="/GridapWorkshopNCI2023/lecture1/">Tutorial 1 - TBA</a> <div class=course-section >Part 2 - TBA</div> <div class=course-section >Part 3 - TBA</div> </nav> <form id=lunrSearchForm  name=lunrSearchForm > <input class=search-input  name=q  placeholder="Enter search term" type=text > <input type=submit  value=Search  formaction="/GridapWorkshopNCI2023/search/index.html"> </form> <br> <br> </div> </div> <div class="content container"> <div class=franklin-content > <h1 id=incompressible_navier-stokes_tutorial ><a href="#incompressible_navier-stokes_tutorial" class=header-anchor >Incompressible Navier-Stokes Tutorial</a></h1> <p>In this tutorial, we will learn</p> <ul> <li><p>How to solve nonlinear multi-field PDEs in Gridap</p> </ul> <h2 id=problem_statement ><a href="#problem_statement" class=header-anchor >Problem statement</a></h2> <p>The goal is to solve a nonlinear multi-field PDE. As a model problem, we consider a well known benchmark in computational fluid dynamics, the lid-driven cavity for the incompressible Navier-Stokes equations.</p> <p>Formally, the PDE we want to solve is: find the velocity vector \(u\) and the pressure \(p\) such that</p> <pre><code class=language-math >\left\lbrace
+\begin&#123;aligned&#125;
+-\Delta u &#43; \mathit&#123;Re&#125;\ &#40;u\cdot \nabla&#41;\ u &#43; \nabla p &#61; 0 &amp;\text&#123; in &#125;\Omega,\\
+\nabla\cdot u &#61; 0 &amp;\text&#123; in &#125; \Omega,\\
+u &#61; g &amp;\text&#123; on &#125; \partial\Omega,
+\end&#123;aligned&#125;
+\right.</code></pre> <p>where the computational domain is the unit square \(\Omega \doteq (0,1)^d\), \(d=2\), and \(\mathit{Re}\) is the Reynolds number. In this example, the driving force is the Dirichlet boundary velocity \(g\), which is a non-zero horizontal velocity with a value of \(g = (1,0)^t\) on the top side of the cavity, namely the boundary \((0,1)\times\{1\}\), and \(g=0\) elsewhere on \(\partial\Omega\). Since we impose Dirichlet boundary conditions on the entire boundary \(\partial\Omega\), the mean value of the pressure is constrained to zero in order have a well posed problem,</p> <pre><code class=language-math >\int_\Omega q \ &#123;\rm d&#125;\Omega &#61; 0.</code></pre>
+<h2 id=numerical_scheme ><a href="#numerical_scheme" class=header-anchor >Numerical Scheme</a></h2>
+<p>In order to approximate this problem we chose a formulation based on inf-sub stable \(Q_k/P_{k-1}\) elements with continuous velocities and discontinuous pressures. The interpolation spaces are defined as follows. The velocity interpolation space is</p>
+<pre><code class=language-math >V \doteq \&#123; v \in &#91;C^0&#40;\Omega&#41;&#93;^d:\ v|_T\in &#91;Q_k&#40;T&#41;&#93;^d \text&#123; for all &#125; T\in\mathcal&#123;T&#125; \&#125;,</code></pre>
+<p>where \(T\) denotes an arbitrary cell of the FE mesh \(\mathcal{T}\), and \(Q_k(T)\) is the local polynomial space in cell \(T\) defined as the multi-variate polynomials in \(T\) of order less or equal to \(k\) in each spatial coordinate. Note that, this is the usual continuous vector-valued Lagrangian FE space of order \(k\) defined on a mesh of quadrilaterals or hexahedra.  On the other hand, the space for the pressure is</p>
+<pre><code class=language-math >\begin&#123;aligned&#125;
+Q_0 &amp;\doteq \&#123; q \in Q: \  \int_\Omega q \ &#123;\rm d&#125;\Omega &#61; 0\&#125;, \text&#123; with&#125;\\
+Q &amp;\doteq \&#123; q \in L^2&#40;\Omega&#41;:\ q|_T\in P_&#123;k-1&#125;&#40;T&#41; \text&#123; for all &#125; T\in\mathcal&#123;T&#125;\&#125;,
+\end&#123;aligned&#125;</code></pre>
+<p>where \(P_{k-1}(T)\) is the polynomial space of multi-variate polynomials in \(T\) of degree less or equal to \(k-1\). Note that functions in \(Q_0\) are strongly constrained to have zero mean value. This is achieved in the code by removing one degree of freedom from the &#40;unconstrained&#41; interpolation space \(Q\) and  adding a constant to the computed pressure so that the resulting function has zero mean value.</p>
+<p>The weak form associated to these interpolation spaces reads: find \((u,p)\in U_g \times Q_0\) such that \([r(u,p)](v,q)=0\) for all \((v,q)\in V_0 \times Q_0\) where \(U_g\) and \(V_0\) are the set of functions in \(V\) fulfilling the Dirichlet boundary condition \(g\) and \(0\)  on \(\partial\Omega\) respectively. The weak residual \(r\) evaluated at a given pair \((u,p)\) is the linear form defined as</p>
+<pre><code class=language-math >&#91;r&#40;u,p&#41;&#93;&#40;v,q&#41; \doteq a&#40;&#40;u,p&#41;,&#40;v,q&#41;&#41;&#43; &#91;c&#40;u&#41;&#93;&#40;v&#41;,</code></pre>
+<p>with</p>
+<pre><code class=language-math >\begin&#123;aligned&#125;
+a&#40;&#40;u,p&#41;,&#40;v,q&#41;&#41; &amp;\doteq \int_&#123;\Omega&#125; \nabla v \cdot \nabla u \ &#123;\rm d&#125;\Omega - \int_&#123;\Omega&#125; &#40;\nabla\cdot v&#41; \ p \ &#123;\rm d&#125;\Omega &#43; \int_&#123;\Omega&#125; q \ &#40;\nabla \cdot u&#41; \ &#123;\rm d&#125;\Omega,\\
+&#91;c&#40;u&#41;&#93;&#40;v&#41; &amp;\doteq \int_&#123;\Omega&#125; v 	\cdot \left&#40; &#40;u\cdot\nabla&#41;\ u \right&#41;\ &#123;\rm d&#125;\Omega.\\
+\end&#123;aligned&#125;</code></pre>
+<p>Note that the bilinear form \(a\) is associated with the linear part of the PDE, whereas \(c\) is the contribution to the residual resulting from the convective term.</p>
+<p>In order to solve this nonlinear weak equation with a Newton-Raphson method, one needs to compute the Jacobian associated with the residual \(r\). In this case, the Jacobian \(j\) evaluated at a pair \((u,p)\) is the bilinear form defined as</p>
+<pre><code class=language-math >&#91;j&#40;u,p&#41;&#93;&#40;&#40;\delta u, \delta p&#41;,&#40;v,q&#41;&#41; \doteq a&#40;&#40;\delta u,\delta p&#41;,&#40;v,q&#41;&#41;  &#43; &#91;&#123;\rm d&#125;c&#40;u&#41;&#93;&#40;\delta u,v&#41;,</code></pre>
+<p>where \({\rm d}c\) results from the linearization of the convective term, namely</p>
+<pre><code class=language-math >&#91;&#123;\rm d&#125;c&#40;u&#41;&#93;&#40;\delta u,v&#41; \doteq \int_&#123;\Omega&#125; v \cdot \left&#40; &#40;u\cdot\nabla&#41;\ \delta u \right&#41; \ &#123;\rm d&#125;\Omega &#43; \int_&#123;\Omega&#125; v \cdot \left&#40; &#40;\delta u\cdot\nabla&#41;\ u \right&#41;  \ &#123;\rm d&#125;\Omega.</code></pre>
+<p>The implementation of this numerical scheme is done in Gridap by combining the concepts previously seen for single-field nonlinear PDEs  and linear multi-field problems.</p>
+<h2 id=creating_the_discrete_model ><a href="#creating_the_discrete_model" class=header-anchor >Creating the discrete model</a></h2>
+<p>We start with the discretization of the computational domain. We consider a \(100\times100\) Cartesian mesh of the unit square.</p>
+<h3 id=exercise_1 ><a href="#exercise_1" class=header-anchor >Exercise 1</a></h3>
+<p><em>Create a discrete model of a \(100\times100\) Cartesian mesh of the unit square. Then create two new boundary tags,  namely <code>&quot;diri1&quot;</code> and <code>&quot;diri0&quot;</code>, one for the top side of the square &#40;where the velocity is non-zero&#41;, and another for the rest of the boundary &#40;where the velocity is zero&#41;.</em> <strong>Hint:</strong> Use the function <code>add_tag_from_tags&#33;</code> to construct new boundary tags from pre-existing cartesian tags. Remember that the cartesian tags are in lexicographic order. <strong>Hint:</strong> You can also print the model to <code>.vtk</code> and visualize the tags with Paraview.</p>
+<pre><code class=language-julia >using Gridap</code></pre>
+<h2 id=setting_up_multifield_fe_spaces ><a href="#setting_up_multifield_fe_spaces" class=header-anchor >Setting up multifield FE spaces</a></h2>
+<p>For the velocities, we need to create a conventional vector-valued continuous Lagrangian FE space.</p>
+<h3 id=exercise_2 ><a href="#exercise_2" class=header-anchor >Exercise 2</a></h3>
+<p><em>Create a standard vector-valued continuous Lagrangian test FE space of second order that is constrained at the <code>diri0</code> and <code>diri1</code> regions.</em></p>
+<pre><code class=language-julia ># Solution of exercise 2</code></pre>
+<p>For the pressure, we instantiate a linear discontinuous FE space of functions strongly constrained to have zero mean value.</p>
+<pre><code class=language-julia >reffeₚ &#61; ReferenceFE&#40;lagrangian,Float64,order-1;space&#61;:P&#41;
+Q &#61; TestFESpace&#40;model,reffeₚ,conformity&#61;:L2,constraint&#61;:zeromean&#41;</code></pre>
+<p>With the options <code>:Lagrangian</code>, <code>space&#61;:P</code>, <code>valuetype&#61;Float64</code>, and <code>order&#61;order-1</code>, we select the local polynomial space \(P_{k-1}(T)\) on the cells \(T\in\mathcal{T}\). With the symbol <code>space&#61;:P</code> we specifically chose a local Lagrangian interpolation of type &quot;P&quot;. Without using <code>space&#61;:P</code>, would lead to a local Lagrangian of type &quot;Q&quot; since this is the default for quadrilateral or hexahedral elements. On the other hand, <code>conformity&#61;:L2,constraint&#61;:zeromean</code> leads to a FE space, whose functions are constrained to have mean value equal to zero, which is just what we need for the pressure space.</p>
+<h3 id=exercise_3 ><a href="#exercise_3" class=header-anchor >Exercise 3</a></h3>
+<p><em>Create the trial velocity and pressure FE spaces.</em></p>
+<p><strong>Hint:</strong> Remember to create the functions prescribing the Dirichlet values at the <code>diri0</code> and <code>diri1</code> regions.</p>
+<pre><code class=language-julia ># Solution of exercise 3</code></pre>
+<p>With all these ingredients we create the FE spaces representing the Cartesian product of the velocity and pressure FE spaces, which is none other than the multifield FE space where we are seeking the solution the problem.</p>
+<pre><code class=language-julia >Y &#61; MultiFieldFESpace&#40;&#91;V, Q&#93;&#41;
+X &#61; MultiFieldFESpace&#40;&#91;U, P&#93;&#41;</code></pre>
+<h2 id=triangulation_and_integration_quadrature ><a href="#triangulation_and_integration_quadrature" class=header-anchor >Triangulation and integration quadrature</a></h2>
+<p>From the discrete model we can define the triangulation and integration measure</p>
+<pre><code class=language-julia >degree &#61; order
+Ωₕ &#61; Triangulation&#40;model&#41;
+dΩ &#61; Measure&#40;Ωₕ,degree&#41;</code></pre>
+<h2 id=nonlinear_weak_form_and_fe_operator ><a href="#nonlinear_weak_form_and_fe_operator" class=header-anchor >Nonlinear weak form and FE operator</a></h2>
+<p>The different terms of the nonlinear weak form for this example are defined using the notation for multi-field problems.</p>
+<pre><code class=language-julia >const Re &#61; 10.0
+conv&#40;u,∇u&#41; &#61; Re*&#40;∇u&#39;&#41;⋅u
+dconv&#40;du,∇du,u,∇u&#41; &#61; conv&#40;u,∇du&#41;&#43;conv&#40;du,∇u&#41;</code></pre>
+<p>The bilinear form reads</p>
+<pre><code class=language-julia >a&#40;&#40;u,p&#41;,&#40;v,q&#41;&#41; &#61; ∫&#40; ∇&#40;v&#41;⊙∇&#40;u&#41; - &#40;∇⋅v&#41;*p &#43; q*&#40;∇⋅u&#41; &#41;dΩ</code></pre>
+<p>Note that, since we are using a Cartesian product FE space, it&#39;s elements are tuples. Here we use <code>&#40;u,p&#41;</code> and <code>&#40;v,q&#41;</code> to denote the trial and test functions.</p>
+<p>The nonlinear term and its Jacobian are given by</p>
+<pre><code class=language-julia >c&#40;u,v&#41; &#61; ∫&#40; v⊙&#40;conv∘&#40;u,∇&#40;u&#41;&#41;&#41; &#41;dΩ
+dc&#40;u,du,v&#41; &#61; ∫&#40; v⊙&#40;dconv∘&#40;du,∇&#40;du&#41;,u,∇&#40;u&#41;&#41;&#41; &#41;dΩ</code></pre>
+<p>The first argument of function <code>dc</code> stands for function \(u\in U_g\), where the Jacobian is evaluated. The second argument represents an arbitrary direction \(\delta u \in V_0\), and the third argument is a test function \(v\in V_0\).</p>
+<p>Note that we can still define forms in terms of one of the FE spaces, as done with the convection term with the velocities and combine them later into the residual and Jacobian multifield forms.</p>
+<p>Finally, the Navier-Stokes weak form residual and Jacobian can be defined as</p>
+<pre><code class=language-julia >res&#40;&#40;u,p&#41;,&#40;v,q&#41;&#41; &#61; a&#40;&#40;u,p&#41;,&#40;v,q&#41;&#41; &#43; c&#40;u,v&#41;
+jac&#40;&#40;u,p&#41;,&#40;du,dp&#41;,&#40;v,q&#41;&#41; &#61; a&#40;&#40;du,dp&#41;,&#40;v,q&#41;&#41; &#43; dc&#40;u,du,v&#41;</code></pre>
+<p>With the functions <code>res</code>, and <code>jac</code> representing the weak residual and the Jacobian, we build the nonlinear FE problem:</p>
+<pre><code class=language-julia >op &#61; FEOperator&#40;res,jac,X,Y&#41;</code></pre>
+<p>Here, we have constructed an instance of <code>FEOperator</code>, which is the type that represents a general nonlinear FE problem in Gridap. The constructor takes the functions representing the weak residual and Jacobian, and the test and trial spaces. If only the function for the residual is provided, the Jacobian is computed internally with automatic differentiation.</p>
+<h2 id=nonlinear_solver_phase ><a href="#nonlinear_solver_phase" class=header-anchor >Nonlinear solver phase</a></h2>
+<p>We have already built the nonlinear FE problem. Now, the remaining step is to solve it. In Gridap, nonlinear &#40;and also linear&#41; FE problems can be solved with instances of the type <code>FESolver</code>.</p>
+<p>We construct an instance of <code>FESolver</code> as follows:</p>
+<pre><code class=language-julia >using LineSearches: BackTracking
+nls &#61; NLSolver&#40;
+  show_trace&#61;true, method&#61;:newton, linesearch&#61;BackTracking&#40;&#41;&#41;
+solver &#61; FESolver&#40;nls&#41;</code></pre>
+<p>Note that the <code>NLSolver</code> function used above internally calls the <code>nlsolve</code> function of the <a href="https://github.com/JuliaNLSolvers/NLsolve.jl">NLsolve</a> package with the provided key-word arguments. Thus, one can use any of the nonlinear methods available via the function <code>nlsolve</code> to solve the nonlinear FE problem. Here, we have selected a Newton-Raphson method with a back-tracking line-search from the <a href="https://github.com/JuliaNLSolvers/LineSearches.jl">LineSearches</a> package.</p>
+<p>We solve the problem without providing an initial guess. This means a default one equal to zero will be generated internally.</p>
+<pre><code class=language-julia >uh, ph &#61; solve&#40;solver,op&#41;</code></pre>
+<p>Finally, we write the results for visualization &#40;see next figure&#41;.</p>
+<pre><code class=language-julia >using DrWatson
+out_file &#61; datadir&#40;&quot;ins&quot;&#41;
+writevtk&#40;Ωₕ,out_file,cellfields&#61;&#91;&quot;uh&quot;&#61;&gt;uh,&quot;ph&quot;&#61;&gt;ph&#93;&#41;</code></pre>
+<p>&lt;img src&#61;&quot;../../assets/literate<em>figures/stokes/ins</em>solution.png&quot; width&#61;&quot;240&quot;&gt;</p>
+<h2 id=references ><a href="#references" class=header-anchor >References</a></h2>
+<p>This tutorial has been adapted from the <a href="https://gridap.github.io/Tutorials/dev/pages/t008_inc_navier_stokes/">Gridap Tutorial 8: Incompressible Navier-Stokes</a></p>
+<p><strong>Tutorial done&#33;</strong></p>
+
+<div class=page-foot >
+  <div class=copyright >
+    <a href="https://github.com/gridap/GridapWorkshopNCI2023"><b>Edit this page on <img class=github-logo  src="https://unpkg.com/ionicons@5.1.2/dist/svg/logo-github.svg"></b></a><br>
+    Last modified: November 19, 2023. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+  </div>
+</div>
+</div>
+    </div>  
+    
+        <script src="/GridapWorkshopNCI2023/libs/katex/katex.min.js"></script>
+<script src="/GridapWorkshopNCI2023/libs/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.body)</script>
+
+    
+    
+        <script src="/GridapWorkshopNCI2023/libs/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();hljs.configure({tabReplace: '    '});</script>

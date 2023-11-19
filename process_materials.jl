@@ -10,7 +10,7 @@ out_dir = string(@__DIR__,"/_literate/")
 
 function replace_string(str)
         strn = str
-        for st in ["../figures/" => "../assets/literate_figures/"]
+        for st in ["../figures/" => "../../assets/literate_figures/"]
             strn = replace(strn, st)
         end
     return strn
@@ -48,7 +48,7 @@ end
 "Use as `preproces` function to remove `#sol`-lines & just remote `#tag`-tag"
 function rm_sol(str)
     str = process_hashtag(str, "#sol=", line->"")
-    str = process_hashtag(str, "#hint=", line->line * "\n")
+    str = process_hashtag(str, "#hint=", line->"#" * line * "\n")
     return str
 end
 "Use as `preproces` function to remove `#hint`-lines & just remote `#sol`-tag"
@@ -58,7 +58,7 @@ function rm_hint(str)
     return str
 end
 
-mkpath("_literate")
+mkpath(out_dir)
 for fl in readdir(src_dir)
     if splitext(fl)[end]!=".jl" || fl=="_deploy.jl" || !occursin(incl, fl)
         continue
@@ -76,5 +76,10 @@ for fl in readdir(src_dir)
 end
 
 # copy literate figures
-#mkpath("../_assets/literate_figures")
-#[cp(string(fig_dir,fl), "_assets/literate_figures/$fl", force=true) for fl in readdir(fig_dir)]
+mkpath("_assets/literate_figures")
+for subdir in readdir(fig_dir)
+    mkpath("_assets/literate_figures/$subdir")
+    for file in readdir(string(fig_dir,subdir))
+        cp(string(fig_dir,subdir,"/",file), "_assets/literate_figures/$subdir/$file", force=true)
+    end
+end

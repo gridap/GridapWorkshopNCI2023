@@ -2,12 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/poisson_distributed/index.html</loc>
-    <lastmod>2023-11-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
     <loc>https://gridap.github.io/GridapWorkshopNCI2023/flyer/index.html</loc>
     <lastmod>2023-11-19</lastmod>
     <changefreq>monthly</changefreq>
@@ -20,7 +14,19 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/E3_transient_stokes/index.html</loc>
+    <lastmod>2023-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/index.html</loc>
+    <lastmod>2023-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/E2_inc_navier_stokes/index.html</loc>
     <lastmod>2023-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -38,7 +44,7 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/poisson/index.html</loc>
+    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/E1_linear_elasticity/index.html</loc>
     <lastmod>2023-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -57,6 +63,18 @@
 </url>
 <url>
     <loc>https://gridap.github.io/GridapWorkshopNCI2023/index.html</loc>
+    <lastmod>2023-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/T1_poisson/index.html</loc>
+    <lastmod>2023-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/T2_poisson_distributed/index.html</loc>
     <lastmod>2023-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

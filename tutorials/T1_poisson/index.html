@@ -1,0 +1,153 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <script src="/GridapWorkshopNCI2023/libs/lunr/lunr.min.js"></script> <script src="/GridapWorkshopNCI2023/libs/lunr/lunr_index.js"></script> <script src="/GridapWorkshopNCI2023/libs/lunr/lunrclient.min.js"></script> <link rel=stylesheet  href="/GridapWorkshopNCI2023/libs/katex/katex.min.css"> <link rel=stylesheet  href="/GridapWorkshopNCI2023/libs/highlight/github.min.css"> <link rel=stylesheet  href="/GridapWorkshopNCI2023/css/franklin.css"> <link rel=stylesheet  href="/GridapWorkshopNCI2023/css/poole_hyde.css"> <link rel=stylesheet  href="/GridapWorkshopNCI2023/css/custom.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=apple-touch-icon  sizes=152x152  href="/GridapWorkshopNCI2023/assets/favicon/apple-touch-icon.png"> <link rel=icon  type="image/png" sizes=32x32  href="/GridapWorkshopNCI2023/assets/favicon/favicon-32x32.png"> <link rel=icon  type="image/png" sizes=16x16  href="/GridapWorkshopNCI2023/assets/favicon/favicon-16x16.png"> <link rel=manifest  href="/GridapWorkshopNCI2023/assets/favicon/site.webmanifest"> <link rel=mask-icon  href="/GridapWorkshopNCI2023/assets/favicon/safari-pinned-tab.svg" color="#5bbad5"> <meta name=msapplication-TileColor  content="#da532c"> <meta name=theme-color  content="#ffffff"> <title>Poisson tutorial</title> <style> .content {max-width: 60rem} </style> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <img src="/GridapWorkshopNCI2023/assets/logos.png" style="width: 500px; height: auto; display: inline"> <div style="font-weight: margin-bottom: 0.5em"><a href="/GridapWorkshopNCI2023/">28-29th, November, 2023</a> <span style="opacity: 0.9;">| Australian National University, Canberra</span></div> <br> <h1><a href="/GridapWorkshopNCI2023/">Introduction to Gridap: Simulating PDEs using finite elements in Julia</a></h1> <div style="line-height:18px; font-size: 15px; opacity: 0.85">by &nbsp; <a href="https://research.monash.edu/en/persons/santiago-badia">Santiago Badia</a>, &nbsp; <a href="https://amartinhuertas.github.io/">Alberto F. Martin</a>, &nbsp; <a href="https://github.com/JordiManyer">Jordi Manyer</a> </div> </div> <br> <style> </style> <nav class=sidebar-nav  style="opacity: 0.9; margin-bottom: 1.2cm;"> <a class="sidebar-nav-item " href="/GridapWorkshopNCI2023/"><b>Welcome</b></a> <a class="sidebar-nav-item " href="/GridapWorkshopNCI2023/software_install/">Software install instructions</a> <a class="sidebar-nav-item " href="/GridapWorkshopNCI2023/tutorials/">Tutorials</a> <a class="sidebar-nav-item " href="/GridapWorkshopNCI2023/references/">References</a> <a class="sidebar-nav-item " href="/GridapWorkshopNCI2023/grants/">Registration and grants for research students</a> <a class="sidebar-nav-item " href="/GridapWorkshopNCI2023/flyer/">Event Flyer</a> <br> <div class=course-section >Part 1 - Introduction to the finite element method</div> <a class="sidebar-nav-item " href="/GridapWorkshopNCI2023/lecture1/">Tutorial 1 - TBA</a> <div class=course-section >Part 2 - TBA</div> <div class=course-section >Part 3 - TBA</div> </nav> <form id=lunrSearchForm  name=lunrSearchForm > <input class=search-input  name=q  placeholder="Enter search term" type=text > <input type=submit  value=Search  formaction="/GridapWorkshopNCI2023/search/index.html"> </form> <br> <br> </div> </div> <div class="content container"> <div class=franklin-content > <h1 id=poisson_tutorial ><a href="#poisson_tutorial" class=header-anchor >Poisson tutorial</a></h1> <p>In this tutorial, we will learn</p> <ul> <li><p>How to solve a simple PDE in Julia with Gridap</p> <li><p>How to build a conforming scalar Lagrangian FE space</p> <li><p>How to define the different terms in a weak form</p> <li><p>How to impose Dirichlet and Neumann boundary conditions</p> <li><p>How to visualize results</p> <li><p>How to compute and plot convergence rates</p> </ul> <h2 id=problem_statement ><a href="#problem_statement" class=header-anchor >Problem statement</a></h2> <p>In this first tutorial, we provide an overview of a complete simulation pipeline in Gridap: from the construction of the FE mesh to the visualization of the computed results. To this end, we consider a simple model problem: the Poisson equation.</p> <p>We want to solve the Poisson equation on the 3D cartesian domain \([-\pi,\pi]\times[-\pi/2,\pi/2]\times[0,1]\) with Dirichlet and Neumann boundary conditions. Dirichlet boundary conditions are applied on \(\Gamma_{\rm D} = \{ z = 0 \} \cup \{ z = 1 \}\), i.e the bottom and top boundaries. Non-homogeneous Neumann conditions are applied everywhere else, i.e \(\Gamma_{\rm N} = \{ x = -\pi \} \cup \{ x = \pi \} \cup \{ y = -\pi/2 \} \cup \{ y = \pi/2 \}\).</p> <p>Formally, the problem to solve is: find the scalar field \(u\) such that</p> <pre><code class=language-math >\left\lbrace
+\begin&#123;aligned&#125;
+-\Delta u &#61; f  \ &amp;\text&#123;in&#125; \ \Omega,\\
+u &#61; g \ &amp;\text&#123;on&#125;\ \Gamma_&#123;\rm D&#125;,\\
+\nabla u\cdot n &#61; h \ &amp;\text&#123;on&#125;\  \Gamma_&#123;\rm N&#125;,\\
+\end&#123;aligned&#125;
+\right.</code></pre> <p>being \(n\) the outwards unit normal vector to the Neumann boundary \(\Gamma_{\rm N}\). In this tutorial, we will try to recover an analytical solution \(u(x,y,z) = cos(x)*sin(y+π)\) and analyze the convergence rates of our numerical approximation.</p> <h2>Numerical scheme</h2> <p>To solve this PDE, we use a conventional Galerkin finite element &#40;FE&#41; method with conforming Lagrangian FE spaces &#40;see, e.g., &#91;1&#93; for specific details on this formulation&#41;. The weak form associated with this formulation is: find \(u\in U\) such that \( a(u,v) = l(v) \) for all \(v\in V\), where \(U\) and \(V\) are the subset of functions in \(H^1(\Omega)\) that fulfill the Dirichlet boundary condition \(g\) and \(0\) respectively. The bilinear and linear forms for this problems are</p> <pre><code class=language-math >a&#40;u,v&#41; \doteq \int_&#123;\Omega&#125; \nabla v \cdot \nabla u \ &#123;\rm d&#125;\Omega, \quad l&#40;v&#41; \doteq \int_&#123;\Omega&#125; v\ f  \ &#123;\rm  d&#125;\Omega &#43; \int_&#123;\Gamma_&#123;\rm N&#125;&#125; v\ h \ &#123;\rm d&#125;\Gamma_&#123;\rm N&#125;.</code></pre>
+<p>The problem is solved numerically by approximating the spaces \(U\) and \(V\) by their discrete counterparts associated with a FE mesh of the computational domain \(\Omega\). As we have anticipated, we consider standard conforming Lagrangian FE spaces for this purpose.</p>
+<p>The implementation of this numerical scheme in Gridap is done in a user-friendly way thanks to the abstractions provided by the library. As it will be seen below, all the mathematical objects involved in the definition of the discrete weak problem have a correspondent representation in the code.</p>
+<h2>Setup</h2>
+<p>The step number 0 in order to solve the problem is to load the Gridap library in the code. If you have configured your Julia environment properly, it is simply done with the line:</p>
+<pre><code class=language-julia >using Gridap
+using DrWatson</code></pre>
+<p>We define the analytical solution we will try to retrieve as follows</p>
+<pre><code class=language-julia >u&#40;x&#41; &#61; cos&#40;x&#91;1&#93;&#41;*sin&#40;x&#91;2&#93;&#43;π&#41;</code></pre>
+<h2 id=discrete_model ><a href="#discrete_model" class=header-anchor >Discrete model</a></h2>
+<p>As in any FE simulation, we need a discretization of the computational domain &#40;i.e., a FE mesh&#41;. All geometrical data needed for solving a FE problem is provided in Gridap by types inheriting from the abstract type <code>DiscreteModel</code>. In our particular case, we will create a <code>CartesianDiscreteModel</code> of the computational domain \(\Omega = [-\pi,\pi]\times[-\pi/2,\pi/2]\times[0,1]\) with a resolution \(n_C=(n_x,n_y,n_z)\)</p>
+<pre><code class=language-julia >domain &#61; &#40;-π,π,-π/2,π/2,0,1&#41;
+nC     &#61; &#40;100,40,5&#41;
+model  &#61; CartesianDiscreteModel&#40;domain,nC&#41;</code></pre>
+<p>By construction, a <code>CartesianDiscreteModel</code> associates with labels every vertex, edge and facet of the model to its parent corner, edge, facet or interior of the grid&#39;s bounding box. Label numbering follows the increasing lexicographic order.</p>
+<p>We use this default order to set up the BCs as follows. For convenience, we create two new boundary tags, namely <code>&quot;dirichlet&quot;</code> and <code>&quot;newmann&quot;</code>.</p>
+<p>Gridap provides a convenient way to create new object identifiers &#40;referred to as &quot;tags&quot;&#41; from existing ones. First, we need to extract from the model, the object that holds the information about the boundary identifiers &#40;referred to as <code>FaceLabeling</code>&#41;:</p>
+<pre><code class=language-julia >labels &#61; get_face_labeling&#40;model&#41;</code></pre>
+<p>Then, we can add new identifiers &#40;aka &quot;tags&quot;&#41; to it. In the next line, we create new tags called <code>&quot;dirichlet&quot;</code> and <code>&quot;newmann&quot;</code> combining the default labels of the model to represent \(\Gamma_D\) and \(\Gamma_N\) respectively.</p>
+<pre><code class=language-julia >add_tag_from_tags&#33;&#40;labels,&quot;dirichlet&quot;,&#91;&quot;tag_21&quot;,&quot;tag_22&quot;&#93;&#41;
+add_tag_from_tags&#33;&#40;labels,&quot;newmann&quot;,&#91;&quot;tag_23&quot;,&quot;tag_24&quot;,&quot;tag_25&quot;,&quot;tag_26&quot;&#93;&#41;</code></pre>
+<p>Note the usage of <code>add_tag_from_tags&#33;</code> to construct new boundary tags gathering lower-level tags.</p>
+<pre><code class=language-julia ># Approximation spaces
+
+order &#61; 1
+reffe &#61; ReferenceFE&#40;lagrangian,Float64,order&#41;
+V &#61; TestFESpace&#40;model,reffe;conformity&#61;:H1,dirichlet_tags&#61;&quot;dirichlet&quot;&#41;</code></pre>
+<p>Here, we have used the <code>TestFESpace</code> constructor, which constructs a particular FE space &#40;to be used as a test space&#41; from a set of options described as positional and key-word arguments. The first positional argument is the model on top of which we want to build the space. The second positional argument contains information about the type of FE interpolation &#40;the reference FE in this case&#41;. With <code>ReferenceFE&#40;lagrangian,Float64,order&#41;</code> We select a scalar-valued Lagrangian reference FE of order 1, where the value of the shape functions will be represented with  64-bit floating point numbers. With the key-word argument <code>conformity</code> we define the regularity of the interpolation at the boundaries of the cells in the mesh. Here, we use <code>conformity&#61;:H1</code>, which means that the resulting interpolation space is a subset of \(H^1(\Omega)\) &#40;i.e., continuous shape functions&#41;. On the other hand, we pass the identifiers of the Dirichlet boundary via the <code>dirichlet_tags</code> argument. Since this is a test space, the corresponding shape functions vanishes at the Dirichlet boundary.</p>
+<p>Once the space \(V\) is discretized in the code, we proceed with the approximation of the trial space \(U\).</p>
+<pre><code class=language-julia >g&#40;x&#41; &#61; u&#40;x&#41;
+U &#61; TrialFESpace&#40;V,g&#41;</code></pre>
+<p>To this end, we have used the <code>TrialFESpace</code> constructors. Note that we have passed a function representing the value of the Dirichlet boundary condition, when building the trial space &#40;here our analytical solution&#41;.</p>
+<h2 id=numerical_integration ><a href="#numerical_integration" class=header-anchor >Numerical integration</a></h2>
+<p>Once we have built the interpolation spaces, the next step is to set up the machinery to perform the integrals in the weak form numerically. Here, we need to compute integrals on the interior of the domain \(\Omega\) and on the Neumann boundary \(\Gamma_{\rm N}\). In both cases, we need two main ingredients. We need to define an integration mesh &#40;i.e. a triangulation of the integration domain&#41;, plus a Gauss-like quadrature in each of the cells in the triangulation. In Gridap, integration meshes are represented by types inheriting from the abstract type <code>Triangulation</code>. For integrating on the domain \(\Omega\), we build the following triangulation and the corresponding Lebesgue measure, which will allow to write down integrals in a syntax similar to the usual mathematical notation.</p>
+<pre><code class=language-julia >degree &#61; order*2
+Ω  &#61; Triangulation&#40;model&#41;
+dΩ &#61; Measure&#40;Ω,degree&#41;</code></pre>
+<p>Here, we build a triangulation from the cells of the model and build &#40;an approximation of&#41; the Lebesgue measure using a quadrature rule of degree 2 in the cells of this triangulation. This is enough for integrating the corresponding terms of the weak form exactly for an interpolation of order 1.</p>
+<p>On the other hand, we need a special type of triangulation, represented by the type <code>BoundaryTriangulation</code>, to integrate on the boundary. Essentially, a <code>BoundaryTriangulation</code> is a particular type of <code>Triangulation</code> that is aware of which cells in the model are touched by faces on the boundary. We build an instance of this type from the discrete model and the names used to identify the Neumann boundary as follows:</p>
+<pre><code class=language-julia >Γ   &#61; BoundaryTriangulation&#40;model,tags&#61;&quot;newmann&quot;&#41;
+dΓ  &#61; Measure&#40;Γ,degree&#41;</code></pre>
+<p>In addition, we have created a quadrature of degree 2 on top of the cells in the triangulation for the Neumann boundary.</p>
+<p>In order to impose our Newmann boundary conditions, we will need to compute the normal vector to the boundary. This is done with the function <code>get_normal_vector</code>:</p>
+<pre><code class=language-julia >n_Γ &#61; get_normal_vector&#40;Γ&#41;</code></pre>
+<h2 id=weak_form ><a href="#weak_form" class=header-anchor >Weak form</a></h2>
+<p>With all the ingredients presented so far, we are ready to define the weak form. This is done by defining functions representing the bi-linear and linear forms:</p>
+<pre><code class=language-julia >f&#40;x&#41;   &#61; -Δ&#40;u&#41;&#40;x&#41;
+∇u&#40;x&#41;  &#61; ∇&#40;u&#41;&#40;x&#41;
+a&#40;u,v&#41; &#61; ∫&#40; ∇&#40;v&#41;⋅∇&#40;u&#41; &#41;*dΩ
+l&#40;v&#41;   &#61; ∫&#40; v*f &#41;*dΩ &#43; ∫&#40; v*&#40;∇u⋅n_Γ&#41; &#41;*dΓ</code></pre>
+<p>Note that by using the integral function <code>∫</code>, the Lebesgue measures <code>dΩ</code>, <code>dΓ</code>, and the gradient function <code>∇</code>, the weak form is written with an obvious relation with the corresponding mathematical notation.</p>
+<h2>FE Problem</h2>
+<p>At this point, we can build the FE problem that, once solved, will provide the numerical solution we are looking for. A FE problem is represented in Gridap by types inheriting from the abstract type <code>FEOperator</code> &#40;both for linear and nonlinear cases&#41;. Since we want to solve a linear problem, we use the concrete type <code>AffineFEOperator</code>, i.e., a problem represented by a matrix and a right hand side vector.</p>
+<pre><code class=language-julia >op &#61; AffineFEOperator&#40;a,l,U,V&#41;</code></pre>
+<p>Note that the <code>AffineFEOperator</code> object representing our FE problem is built from the function <code>a</code> and <code>l</code> representing the weak form and test and trial FE spaces <code>V</code> and <code>U</code>.</p>
+<p>We can also retrieve the matrix and the right hand side vector of the problem as follows:</p>
+<pre><code class=language-julia >A &#61; get_matrix&#40;op&#41;
+b &#61; get_vector&#40;op&#41;</code></pre>
+<h2>Solver phase</h2>
+<p>We have constructed a FE problem, the last step is to solve it. In Gridap, FE problems are solved with types inheriting from the abstract type <code>FESolver</code>. Since this is a linear problem, we use a <code>LinearFESolver</code>:</p>
+<pre><code class=language-julia >ls &#61; LUSolver&#40;&#41;
+solver &#61; LinearFESolver&#40;ls&#41;</code></pre>
+<p><code>LinearFESolver</code> objects are built from a given algebraic linear solver. In this case, we use a LU factorization. Now we are ready to solve the FE problem with the FE solver as follows:</p>
+<pre><code class=language-julia >uh &#61; solve&#40;solver,op&#41;</code></pre>
+<p>The <code>solve</code> function returns the computed numerical solution <code>uh</code>. This object is an instance of <code>FEFunction</code>, the type used to represent a function in a FE space. <code>FEFunction</code> is part of the <code>CellField</code> abstract type, which are objects that represent fields over a triangulated domain. We can inspect the result by writing it into a <code>vtk</code> file:</p>
+<pre><code class=language-julia >writevtk&#40;Ω,datadir&#40;&quot;poisson_sol&quot;&#41;,cellfields&#61;&#91;&quot;uh&quot;&#61;&gt;uh&#93;&#41;</code></pre>
+<p>which will generate a file named <code>poisson_sol.vtu</code> having a nodal field named <code>&quot;uh&quot;</code> containing the solution of our problem &#40;see next figure&#41;.</p>
+<p><img src="../../assets/literate_figures/poisson/fig_uh.png" alt="" /></p>
+<p>Additionaly, we can compute the L2 error of the numerical solution as follows:</p>
+<pre><code class=language-julia >e &#61; uh - u
+l2_error &#61; sum&#40;∫&#40;e⋅e&#41;*dΩ&#41;</code></pre>
+<h2 id=convergence_analysis ><a href="#convergence_analysis" class=header-anchor >Convergence analysis</a></h2>
+<p>One of the advantages of having an analytical solution is that we can compute the convergence rates of our numerical approximation. The first step is to define a driver by putting together all the steps described above. The driver takes two arguments: the number of cells in the \(x\) and \(y\) direction, \(n\), and the order of the finite-element interpolation, \(p\). It returns the L2 error of the numerical solution.</p>
+<pre><code class=language-julia >function driver&#40;n,order&#41;
+  domain &#61; &#40;-π,π,-π/2,π/2,0,1&#41;
+  nC     &#61; &#40;n,n,1&#41;
+  model  &#61; CartesianDiscreteModel&#40;domain,nC&#41;
+  labels &#61; get_face_labeling&#40;model&#41;
+  add_tag_from_tags&#33;&#40;labels,&quot;dirichlet&quot;,&#91;&quot;tag_21&quot;,&quot;tag_22&quot;&#93;&#41;
+  add_tag_from_tags&#33;&#40;labels,&quot;newmann&quot;,&#91;&quot;tag_23&quot;,&quot;tag_24&quot;,&quot;tag_25&quot;,&quot;tag_26&quot;&#93;&#41;
+
+  reffe &#61; ReferenceFE&#40;lagrangian,Float64,order&#41;
+  V &#61; TestFESpace&#40;model,reffe;conformity&#61;:H1,dirichlet_tags&#61;&quot;dirichlet&quot;&#41;
+
+  U &#61; TrialFESpace&#40;V,u&#41;
+  degree &#61; order*2&#43;1
+  Ω   &#61; Triangulation&#40;model&#41;
+  dΩ  &#61; Measure&#40;Ω,degree&#41;
+  Γ   &#61; BoundaryTriangulation&#40;model,tags&#61;&quot;newmann&quot;&#41;
+  dΓ  &#61; Measure&#40;Γ,degree&#41;
+  n_Γ &#61; get_normal_vector&#40;Γ&#41;
+
+  f&#40;x&#41;   &#61; -Δ&#40;u&#41;&#40;x&#41;
+  ∇u&#40;x&#41;  &#61; ∇&#40;u&#41;&#40;x&#41;
+  a&#40;u,v&#41; &#61; ∫&#40; ∇&#40;v&#41;⋅∇&#40;u&#41; &#41;*dΩ
+  l&#40;v&#41;   &#61; ∫&#40; v*f &#41;*dΩ &#43; ∫&#40; v*&#40;∇u⋅n_Γ&#41; &#41;*dΓ
+  op     &#61; AffineFEOperator&#40;a,l,U,V&#41;
+  ls     &#61; LUSolver&#40;&#41;
+  solver &#61; LinearFESolver&#40;ls&#41;
+  uh &#61; solve&#40;solver,op&#41;
+
+  e &#61; uh - u
+  return sum&#40;∫&#40;e⋅e&#41;*dΩ&#41;
+end</code></pre>
+<p>We then run the driver for different values of \(n\) and \(p\), saving the values of the L2 error for each configuration.</p>
+<pre><code class=language-julia >order_vec &#61; &#91;1,2&#93;
+n_vec &#61; &#91;10,20,40,80&#93;
+h_vec &#61; map&#40;n -&gt; &#40;2π/n&#41;*&#40;π/n&#41;*&#40;0.5&#41;, n_vec&#41;
+
+error &#61; zeros&#40;&#40;length&#40;order_vec&#41;,length&#40;n_vec&#41;&#41;&#41;
+for &#40;i,order&#41; in enumerate&#40;order_vec&#41;
+  for &#40;j,n&#41; in enumerate&#40;n_vec&#41;
+    error&#91;i,j&#93; &#61; driver&#40;n,order&#41;
+  end
+end</code></pre>
+<p>Finally, we plot the results and compute the convergence rates.</p>
+<pre><code class=language-julia >using Plots
+plt &#61; plot&#40;xlabel&#61;&quot;log10&#40;h&#41;&quot;,ylabel&#61;&quot;log10&#40;L2 error&#41;&quot;,grid&#61;true&#41;
+for &#40;i,e&#41; in enumerate&#40;eachrow&#40;error&#41;&#41;
+  order &#61; order_vec&#91;i&#93;
+  dx &#61; log10&#40;h_vec&#91;1&#93;&#41; - log10&#40;h_vec&#91;end&#93;&#41;
+  dy &#61; log10&#40;e&#91;1&#93;&#41; - log10&#40;e&#91;end&#93;&#41;
+  slope &#61; string&#40;dy/dx&#41;&#91;1:4&#93;
+  plot&#33;&#40;plt,log10.&#40;h_vec&#41;,log10.&#40;e&#41;,label&#61;&quot;p &#61; &#36;&#40;order&#41;, slope &#61; &#36;&#40;slope&#41;&quot;&#41;
+end
+@show plt</code></pre>
+<p>The resulting plot is shown in the next figure:</p>
+<p><img src="../../assets/literate_figures/poisson/convergence.png" alt="" /></p>
+<p>As expected, we observe a convergence rate of order \(p+1\).</p>
+
+<div class=page-foot >
+  <div class=copyright >
+    <a href="https://github.com/gridap/GridapWorkshopNCI2023"><b>Edit this page on <img class=github-logo  src="https://unpkg.com/ionicons@5.1.2/dist/svg/logo-github.svg"></b></a><br>
+    Last modified: November 19, 2023. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+  </div>
+</div>
+</div>
+    </div>  
+    
+        <script src="/GridapWorkshopNCI2023/libs/katex/katex.min.js"></script>
+<script src="/GridapWorkshopNCI2023/libs/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.body)</script>
+
+    
+    
+        <script src="/GridapWorkshopNCI2023/libs/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();hljs.configure({tabReplace: '    '});</script>
