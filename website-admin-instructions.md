@@ -162,7 +162,7 @@ Changes pushed to the submodule will not be seen by this repository (since the s
 
 ```bash
 git submodule update --remote
-git add .
+git add workshop-materials
 git commit -m "git submodule updated"
 git push origin main
 ```
