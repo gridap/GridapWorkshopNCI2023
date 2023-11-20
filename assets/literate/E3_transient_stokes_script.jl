@@ -45,10 +45,12 @@ T = 1.0
 xₕₜ = solve(ode_solver,op,x₀,t₀,T)
 
 using DrWatson
-out_file = datadir("transient_stokes")
-createpvd(out_file) do pvd
+dir = datadir("transient_stokes")
+!isdir(dir) && mkdir(dir)
+createpvd(dir) do pvd
   for (xₕ,t) in xₕₜ
     (uₕ,pₕ) = xₕ
-    pvd[t] = createvtk(Ωₕ,out_file*"_$t.vtu",cellfields=["uh"=>uₕ,"ph"=>pₕ])
+    file = dir*"/solution_$t"*".vtu"
+    pvd[t] = createvtk(Ω,file,cellfields=["uh"=>uₕ,"ph"=>pₕ])
   end
 end

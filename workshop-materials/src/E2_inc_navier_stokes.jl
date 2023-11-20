@@ -190,6 +190,7 @@ using DrWatson
 out_file = datadir("ins")
 writevtk(Ωₕ,out_file,cellfields=["uh"=>uh,"ph"=>ph])
 
+#
 # <img src="../figures/stokes/ins_solution.png" width="240">
 #
 # ## References
