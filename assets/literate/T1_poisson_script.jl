@@ -12,7 +12,7 @@ model  = CartesianDiscreteModel(domain,nC)
 labels = get_face_labeling(model)
 
 add_tag_from_tags!(labels,"dirichlet",["tag_21","tag_22"])
-add_tag_from_tags!(labels,"newmann",["tag_23","tag_24","tag_25","tag_26"])
+add_tag_from_tags!(labels,"neumann",["tag_23","tag_24","tag_25","tag_26"])
 
 order = 1
 reffe = ReferenceFE(lagrangian,Float64,order)
@@ -25,7 +25,7 @@ degree = order*2
 Ω  = Triangulation(model)
 dΩ = Measure(Ω,degree)
 
-Γ   = BoundaryTriangulation(model,tags="newmann")
+Γ   = BoundaryTriangulation(model,tags="neumann")
 dΓ  = Measure(Γ,degree)
 
 n_Γ = get_normal_vector(Γ)
@@ -56,7 +56,7 @@ function driver(n,order)
   model  = CartesianDiscreteModel(domain,nC)
   labels = get_face_labeling(model)
   add_tag_from_tags!(labels,"dirichlet",["tag_21","tag_22"])
-  add_tag_from_tags!(labels,"newmann",["tag_23","tag_24","tag_25","tag_26"])
+  add_tag_from_tags!(labels,"neumann",["tag_23","tag_24","tag_25","tag_26"])
 
   reffe = ReferenceFE(lagrangian,Float64,order)
   V = TestFESpace(model,reffe;conformity=:H1,dirichlet_tags="dirichlet")
@@ -65,7 +65,7 @@ function driver(n,order)
   degree = order*2+1
   Ω   = Triangulation(model)
   dΩ  = Measure(Ω,degree)
-  Γ   = BoundaryTriangulation(model,tags="newmann")
+  Γ   = BoundaryTriangulation(model,tags="neumann")
   dΓ  = Measure(Γ,degree)
   n_Γ = get_normal_vector(Γ)
 
