@@ -13,9 +13,8 @@ model  = CartesianDiscreteModel(domain,nC)</code></pre>
 <pre><code class="julia hljs">add_tag_from_tags!(labels,<span class=hljs-string >&quot;dirichlet&quot;</span>,[<span class=hljs-string >&quot;tag_21&quot;</span>,<span class=hljs-string >&quot;tag_22&quot;</span>])
 add_tag_from_tags!(labels,<span class=hljs-string >&quot;newmann&quot;</span>,[<span class=hljs-string >&quot;tag_23&quot;</span>,<span class=hljs-string >&quot;tag_24&quot;</span>,<span class=hljs-string >&quot;tag_25&quot;</span>,<span class=hljs-string >&quot;tag_26&quot;</span>])</code></pre>
 <p>Note the usage of <code>add_tag_from_tags&#33;</code> to construct new boundary tags gathering lower-level tags.</p>
-<pre><code class="julia hljs"><span class=hljs-comment ># Approximation spaces</span>
-
-order = <span class=hljs-number >1</span>
+<h2 id=approximation_spaces ><a href="#approximation_spaces" class=header-anchor >Approximation spaces</a></h2>
+<pre><code class="julia hljs">order = <span class=hljs-number >1</span>
 reffe = ReferenceFE(lagrangian,<span class=hljs-built_in >Float64</span>,order)
 V = TestFESpace(model,reffe;conformity=:H1,dirichlet_tags=<span class=hljs-string >&quot;dirichlet&quot;</span>)</code></pre>
 <p>Here, we have used the <code>TestFESpace</code> constructor, which constructs a particular FE space &#40;to be used as a test space&#41; from a set of options described as positional and key-word arguments. The first positional argument is the model on top of which we want to build the space. The second positional argument contains information about the type of FE interpolation &#40;the reference FE in this case&#41;. With <code>ReferenceFE&#40;lagrangian,Float64,order&#41;</code> We select a scalar-valued Lagrangian reference FE of order 1, where the value of the shape functions will be represented with  64-bit floating point numbers. With the key-word argument <code>conformity</code> we define the regularity of the interpolation at the boundaries of the cells in the mesh. Here, we use <code>conformity&#61;:H1</code>, which means that the resulting interpolation space is a subset of <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>H</mi><mn>1</mn></msup><mo stretchy=false >(</mo><mi mathvariant=normal >Ω</mi><mo stretchy=false >)</mo></mrow><annotation encoding="application/x-tex">H^1(\Omega)</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:1.064108em;vertical-align:-0.25em;"></span><span class=mord ><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span><span class=mopen >(</span><span class=mord >Ω</span><span class=mclose >)</span></span></span></span> &#40;i.e., continuous shape functions&#41;. On the other hand, we pass the identifiers of the Dirichlet boundary via the <code>dirichlet_tags</code> argument. Since this is a test space, the corresponding shape functions vanishes at the Dirichlet boundary.</p>
@@ -124,7 +123,7 @@ plt = plot(xlabel=<span class=hljs-string >&quot;log10(h)&quot;</span>,ylabel=<s
 <div class=page-foot >
   <div class=copyright >
     <a href="https://github.com/gridap/GridapWorkshopNCI2023"><b>Edit this page on <img class=github-logo  src="https://unpkg.com/ionicons@5.1.2/dist/svg/logo-github.svg"></b></a><br>
-    Last modified: November 19, 2023. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    Last modified: November 20, 2023. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div>

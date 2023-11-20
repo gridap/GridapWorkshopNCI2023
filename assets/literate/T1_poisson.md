@@ -83,9 +83,9 @@ add_tag_from_tags!(labels,"newmann",["tag_23","tag_24","tag_25","tag_26"])
 
 Note the usage of `add_tag_from_tags!` to construct new boundary tags gathering lower-level tags.
 
-````julia:ex6
-# Approximation spaces
+## Approximation spaces
 
+````julia:ex6
 order = 1
 reffe = ReferenceFE(lagrangian,Float64,order)
 V = TestFESpace(model,reffe;conformity=:H1,dirichlet_tags="dirichlet")

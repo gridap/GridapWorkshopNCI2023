@@ -14,8 +14,6 @@ labels = get_face_labeling(model)
 add_tag_from_tags!(labels,"dirichlet",["tag_21","tag_22"])
 add_tag_from_tags!(labels,"newmann",["tag_23","tag_24","tag_25","tag_26"])
 
-# Approximation spaces
-
 order = 1
 reffe = ReferenceFE(lagrangian,Float64,order)
 V = TestFESpace(model,reffe;conformity=:H1,dirichlet_tags="dirichlet")
