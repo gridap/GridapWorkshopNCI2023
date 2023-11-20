@@ -4,21 +4,17 @@ title = "Introduction to Gridap: Simulating PDEs using finite elements in Julia"
 
 # Introduction to Gridap: Simulating PDEs using finite elements in Julia
 
-:construction: :construction: :construction:  **Page under construction!!!**  :construction: :construction: :construction:
 
-🎉 Welcome to the webpage of the workshop **"Introduction to Gridap: Simulating PDEs using finite elements in Julia"**.
+🎉 Welcome to the webpage of Gridap's workshop at ANU!
 
-The workshop will be celebrated at the Australian National University (ANU), Canberra, 
-the 28th and 29th of November, 2023. 
+* **Where?** [Birch 1.45 Interactive Theatre, 35 Science Rd](/venue/), the [Australian National University (ANU)](https://www.anu.edu.au/), Canberra.
+* **When?** 28th and 29th, Nov, 2023, 9AM-5PM both days. 
 
 ~~~
 <center>
   <video width="65%" autoplay loop controls src="/assets/NSWE_48x48_1_trapezoidal_dt_480_tau_dtdiv2.mp4"/>
 </center>
 ~~~
-
--_This event is supported by the [School of Computing](https://comp.anu.edu.au/) and its [Computational Science Cluster](https://comp.anu.edu.au/research/clusters/computational-science/) at the Australian National University, [NCI Australia](https://nci.org.au/) and [Monash University](https://www.monash.edu/)._
-
 
 ## Workshop description
 
@@ -33,28 +29,6 @@ The emphasis will be mainly on presenting the main software abstractions underly
 
 **Participants must bring their own laptops**. Instructions to install the software are available [here](/software_install/). **These should
 be followed before the actual workshop takes place.**
-
-### Outline
-- **Part 1**  _Introduction to finite element methods_
-  - TBA1
-  - TBA2
-  - TBA3
-  - TBA4
-
-- **Part 2**  _TBA_
-  - TBA1
-  - TBA2
-  - TBA3
-  - TBA4
-
-- **Part 3** _TBA_
-  - TBA1
-  - TBA2
-  - TBA3
-  - TBA4
-
-
-> Workshop repository: [https://github.com/gridap/GridapWorkshopNCI2023](https://github.com/gridap/GridapWorkshopNCI2023)
 
 ## Teaching staff
 - [Prof. Santiago Badia](https://research.monash.edu/en/persons/santiago-badia) - [School of Mathematics](https://www.monash.edu/science/schools/school-of-mathematics), Faculty of Science, Monash University.
