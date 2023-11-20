@@ -23,6 +23,7 @@ hascode = false
 ### Complementary courses 
 
 - [Julia for HPC course from ENCCS (Sweden)](https://enccs.github.io/julia-for-hpc/)
+- [Imperial College London course on the analysis and implementation of Finite Elements](https://finite-element.github.io/)
 
 ### Repositories
 
