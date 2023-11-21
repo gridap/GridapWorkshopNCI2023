@@ -86,7 +86,8 @@ end
 
 # Copy software installation instructions
 str = readlines("workshop-materials/README.md")
-str[1] = "# Software Installation instructions \n "
-str = map(line -> line * "\n ", str[2:end])
+
+#str[1] = "# Software Installation instructions \n "
+str = map(line -> line * "\n", str[1:end])
 str = prod(str)
 write("software_install.md",str)
