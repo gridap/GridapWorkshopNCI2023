@@ -1,5 +1,5 @@
 +++
-title = "Tutorials"
+title = "Tutorials & Exercises"
 +++
 
 # Tutorials & Exercises
