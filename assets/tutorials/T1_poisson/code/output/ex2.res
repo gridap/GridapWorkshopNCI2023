@@ -1,1 +1,1 @@
-u (generic function with 1 method)
+Δu₀ (generic function with 1 method)

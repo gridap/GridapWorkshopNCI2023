@@ -1,9 +1,4 @@
 <!--This file was generated, do not modify it.-->
-In this **exercise**, we will learn
-
- - How to impose Dirichlet boundary conditions only in selected components
- - How to impose Dirichlet boundary conditions described by more than one function
-
 ## Problem statement
 
 We want to solve a linear elasticity problem defined on the 3D domain depicted in next figure.
@@ -38,18 +33,19 @@ $$
 
 ## Load and inspect the discrete model
 
-On top of it's mesh-generation functionalities, Gridap provides a convenient way to read and write discrete models from and to files. We import the model for this problem from `Gmsh` as follows:
+On top of it's mesh-generation functionalities, Gridap provides a convenient ways to read and write discrete models from and to files. We import the model for this problem from `GMSH` as follows:
 
 ````julia:ex1
 using Gridap, GridapGmsh
+using DrWatson
+
 msh_file_gmsh = projectdir("meshes/elasticity.msh")
 model = GmshDiscreteModel(msh_file_gmsh)
 ````
 
-This model contains the mesh and the physical tags of the model, which have been created directly through `Gmsh`. Another option would be to create the a complicated model using Gridap, then exporting to `.json` format in the followig way:
+This model contains the mesh and the physical tags of the model, which have been created directly through `GMSH`. Another option would be to create the model using Gridap, then exporting to `.json` format in the followig way:
 
 ````julia:ex2
-using Gridap.Io
 msh_file_json = projectdir("meshes/elasticity.json")
 to_json_file(model,msh_file_json)
 ````
@@ -72,10 +68,6 @@ The previous line generates four different files `model_0.vtu`, `model_1.vtu`, `
 
 _Open the resulting files with Paraview. Visualize the faces of the model and color them by each of the available fields. Identify the field names representing the boundaries $\Gamma_{\rm B}$ and $\Gamma_{\rm G}$._
 
-````julia:ex5
-# Solution for exercise 1
-````
-
 ## Set up the vector-valued FE space with Dirichlet BCs in selected components
 
 We will construct the vector-valued test FE space as follows:
@@ -92,8 +84,8 @@ V0 = TestFESpace(model,reffe;
 The vector-valued interpolation is selected via the option `valuetype=VectorValue{3,Float64}`, where we use the type `VectorValue{3,Float64}`, which is the way Gridap represents vectors of three `Float64` components.
 
 In the next two exercises, we will fill in
-1. the `dirichlet_tags` optional argument to identify the Dirichlet regions, and
-2. the `dirichlet_masks` optional argument to specify which components of the displacement are constrained.
+  1. the `dirichlet_tags` optional argument to identify the Dirichlet regions, and
+  2. the `dirichlet_masks` optional argument to specify which components of the displacement are constrained.
 
 Let's go step-by-step.
 
@@ -103,7 +95,7 @@ _Fill in the `dirichlet_tags` using the tag names identified in **Exercise 2** f
 
 **Hint:** The general input format of `dirichlet_tags` is a one-dimensional array of tag name strings `["tag_name_1",...,"tag_name_n"]`.
 
-````julia:ex6
+````julia:ex5
 # Solution for exercise 2
 ````
 
@@ -115,13 +107,13 @@ _Fill in the `dirichlet_masks` to select the displacement components to constrai
 
 Recall that we constrain only the first component on the boundary $\Gamma_{\rm B}$, whereas we constrain all components on $\Gamma_{\rm G}$.
 
-````julia:ex7
+````julia:ex6
 # Solution for exercise 3
 ````
 
 We can now instantiate the vector-valued test FE space.
 
-````julia:ex8
+````julia:ex7
 order = 1
 reffe = ReferenceFE(lagrangian,VectorValue{3,Float64},order)
 V0    = TestFESpace(model,reffe;
@@ -138,7 +130,7 @@ _Define the Dirichlet functions according to the problem statement._
 
 **Hint:** The functions must be vector-valued with the format `VectorValue(val_x1,...,val_xD)`.
 
-````julia:ex9
+````julia:ex8
 # Solution for exercise 4
 ````
 
@@ -148,7 +140,7 @@ _Define the trial FE space `U`._
 
 **Hint:** Pass the Dirichlet functions in a one-dimensional array, in the same order as `dirichlet_tags` and `dirichlet_masks`.
 
-````julia:ex10
+````julia:ex9
 # Solution for exercise 5
 ````
 
@@ -158,13 +150,13 @@ We will now visually check the Dirichlet values are being correctly assigned on 
 
 _Create a `BoundaryTriangulation` of the Dirichlet boundaries._
 
-````julia:ex11
+````julia:ex10
 # Solution for exercise 6
 ````
 
 Next, we create a FE Function of `U` with zero-valued free values.
 
-````julia:ex12
+````julia:ex11
 vh = zero(U)
 ````
 
@@ -172,7 +164,7 @@ vh = zero(U)
 
 _Plot `vh` on the Dirichlet boundaries using `writevtk`_
 
-````julia:ex13
+````julia:ex12
 # Solution for exercise 7
 ````
 
@@ -192,7 +184,7 @@ _Read the details about how we define weak form, solve the problem and visualise
 
 The construction of the weak form needs to account for the constitutive law that relates strain and stress. The symmetric gradient operator is represented by the function `ε` provided by Gridap (also available as `symmetric_gradient`). However, function `σ` representing the stress tensor is not predefined in the library and it has to be defined ad-hoc by the user, namely
 
-````julia:ex14
+````julia:ex13
 const E = 70.0e9
 const ν = 0.33
 const λ = (E*ν)/((1+ν)*(1-2*ν))
@@ -204,7 +196,7 @@ Function `σ` takes a strain tensor `ε` (one can interpret this strain as the s
 
 We build now the integration mesh and the corresponding measure
 
-````julia:ex15
+````julia:ex14
 degree = 2*order
 Ω      = Triangulation(model)
 dΩ     = Measure(Ω,degree)
@@ -212,7 +204,7 @@ dΩ     = Measure(Ω,degree)
 
 From these objects and the constitutive law previously defined, we can write the weak form as follows
 
-````julia:ex16
+````julia:ex15
 a(u,v) = ∫( (σ∘ε(u)) ⊙ ε(v) )dΩ
 l(v)   = 0
 ````
@@ -221,15 +213,14 @@ Note that we have composed function `σ` with the strain field `ε(u)` in order 
 
 The remaining steps for solving the FE problem are rather standard.
 
-````julia:ex17
+````julia:ex16
 op = AffineFEOperator(a,l,U,V0)
 uh = solve(op)
 ````
 
 Finally, we write the results to a file. Note that we also include the strain and stress tensors into the results file.
 
-````julia:ex18
-using DrWatson
+````julia:ex17
 out_file = datadir("elasticity_sol")
 writevtk(Ω,out_file,cellfields=["uh"=>uh,"epsi"=>ε(uh),"sigma"=>σ∘ε(uh)])
 ````

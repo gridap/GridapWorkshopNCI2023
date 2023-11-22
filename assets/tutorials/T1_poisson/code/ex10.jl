@@ -1,2 +1,3 @@
 # This file was generated, do not modify it. # hide
-n_Γ = get_normal_vector(Γ)
+Γ   = BoundaryTriangulation(model,tags="neumann")
+dΓ  = Measure(Γ,degree)

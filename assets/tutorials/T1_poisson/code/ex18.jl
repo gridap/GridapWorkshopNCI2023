@@ -10,23 +10,20 @@ function driver(n,order)
   reffe = ReferenceFE(lagrangian,Float64,order)
   V = TestFESpace(model,reffe;conformity=:H1,dirichlet_tags="dirichlet")
 
-  U = TrialFESpace(V,u)
+  U = TrialFESpace(V,g)
   degree = order*2+1
   Ω   = Triangulation(model)
   dΩ  = Measure(Ω,degree)
   Γ   = BoundaryTriangulation(model,tags="neumann")
   dΓ  = Measure(Γ,degree)
-  n_Γ = get_normal_vector(Γ)
 
-  f(x)   = -Δ(u)(x)
-  ∇u(x)  = ∇(u)(x)
   a(u,v) = ∫( ∇(v)⋅∇(u) )*dΩ
-  l(v)   = ∫( v*f )*dΩ + ∫( v*(∇u⋅n_Γ) )*dΓ
+  l(v)   = ∫( v*f )*dΩ + ∫( v*h )*dΓ
   op     = AffineFEOperator(a,l,U,V)
   ls     = LUSolver()
   solver = LinearFESolver(ls)
   uh = solve(solver,op)
 
-  e = uh - u
+  e = uh - u₀
   return sum(∫(e⋅e)*dΩ)
 end

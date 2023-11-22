@@ -1,3 +1,3 @@
 # This file was generated, do not modify it. # hide
-op = AffineFEOperator(a,l,U,V0)
-uh = solve(op)
+out_file = datadir("elasticity_sol")
+writevtk(Ω,out_file,cellfields=["uh"=>uh,"epsi"=>ε(uh),"sigma"=>σ∘ε(uh)])

@@ -3,7 +3,13 @@
 using Gridap
 using DrWatson
 
-u(x) = cos(x[1])*sin(x[2]+π)
+u₀(x)  = cos(x[1])*sin(x[2]+π)
+∇u₀(x) = VectorValue(-sin(x[1])*sin(x[2]+π),cos(x[1])*cos(x[2]+π),0.0)
+Δu₀(x) = -2.0*cos(x[1])*sin(x[2]+π)
+
+f(x) = -Δu₀(x)
+g(x) = u₀(x)
+h(x) = 0.0      # ∇u₀ ⋅ n_Γ = ∇u₀ ⋅ ± e₃ = 0
 
 domain = (-π,π,-π/2,π/2,0,1)
 nC     = (100,40,5)
@@ -11,14 +17,13 @@ model  = CartesianDiscreteModel(domain,nC)
 
 labels = get_face_labeling(model)
 
-add_tag_from_tags!(labels,"dirichlet",["tag_21","tag_22"])
-add_tag_from_tags!(labels,"neumann",["tag_23","tag_24","tag_25","tag_26"])
+add_tag_from_tags!(labels,"neumann",["tag_21","tag_22"])
+add_tag_from_tags!(labels,"dirichlet",["tag_23","tag_24","tag_25","tag_26"])
 
 order = 1
 reffe = ReferenceFE(lagrangian,Float64,order)
 V = TestFESpace(model,reffe;conformity=:H1,dirichlet_tags="dirichlet")
 
-g(x) = u(x)
 U = TrialFESpace(V,g)
 
 degree = order*2
@@ -28,12 +33,8 @@ dΩ = Measure(Ω,degree)
 Γ   = BoundaryTriangulation(model,tags="neumann")
 dΓ  = Measure(Γ,degree)
 
-n_Γ = get_normal_vector(Γ)
-
-f(x)   = -Δ(u)(x)
-∇u(x)  = ∇(u)(x)
 a(u,v) = ∫( ∇(v)⋅∇(u) )*dΩ
-l(v)   = ∫( v*f )*dΩ + ∫( v*(∇u⋅n_Γ) )*dΓ
+l(v)   = ∫( v*f )*dΩ + ∫( v*h )*dΓ
 
 op = AffineFEOperator(a,l,U,V)
 
@@ -45,9 +46,9 @@ solver = LinearFESolver(ls)
 
 uh = solve(solver,op)
 
-writevtk(Ω,datadir("poisson_sol"),cellfields=["uh"=>uh])
+writevtk(Ω,datadir("poisson"),cellfields=["uh"=>uh])
 
-e = uh - u
+e = uh - u₀
 l2_error = sum(∫(e⋅e)*dΩ)
 
 function driver(n,order)
@@ -61,24 +62,21 @@ function driver(n,order)
   reffe = ReferenceFE(lagrangian,Float64,order)
   V = TestFESpace(model,reffe;conformity=:H1,dirichlet_tags="dirichlet")
 
-  U = TrialFESpace(V,u)
+  U = TrialFESpace(V,g)
   degree = order*2+1
   Ω   = Triangulation(model)
   dΩ  = Measure(Ω,degree)
   Γ   = BoundaryTriangulation(model,tags="neumann")
   dΓ  = Measure(Γ,degree)
-  n_Γ = get_normal_vector(Γ)
 
-  f(x)   = -Δ(u)(x)
-  ∇u(x)  = ∇(u)(x)
   a(u,v) = ∫( ∇(v)⋅∇(u) )*dΩ
-  l(v)   = ∫( v*f )*dΩ + ∫( v*(∇u⋅n_Γ) )*dΓ
+  l(v)   = ∫( v*f )*dΩ + ∫( v*h )*dΓ
   op     = AffineFEOperator(a,l,U,V)
   ls     = LUSolver()
   solver = LinearFESolver(ls)
   uh = solve(solver,op)
 
-  e = uh - u
+  e = uh - u₀
   return sum(∫(e⋅e)*dΩ)
 end
 

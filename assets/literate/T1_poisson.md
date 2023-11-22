@@ -1,19 +1,9 @@
 <!--This file was generated, do not modify it.-->
-In this tutorial, we will learn
-
-   -  How to solve a simple PDE in Julia with Gridap
-   -  How to build a conforming scalar Lagrangian FE space
-   -  How to define the different terms in a weak form
-   -  How to impose Dirichlet and Neumann boundary conditions
-   -  How to visualize results
-   -  How to compute and plot convergence rates
-
-
 ## Problem statement
 
 In this first tutorial, we provide an overview of a complete simulation pipeline in Gridap: from the construction of the FE mesh to the visualization of the computed results. To this end, we consider a simple model problem: the Poisson equation.
 
-We want to solve the Poisson equation on the 3D cartesian domain $[-\pi,\pi]\times[-\pi/2,\pi/2]\times[0,1]$ with Dirichlet and Neumann boundary conditions. Dirichlet boundary conditions are applied on $\Gamma_{\rm D} = \{ z = 0 \} \cup \{ z = 1 \}$, i.e the bottom and top boundaries. Non-homogeneous Neumann conditions are applied everywhere else, i.e $\Gamma_{\rm N} = \{ x = -\pi \} \cup \{ x = \pi \} \cup \{ y = -\pi/2 \} \cup \{ y = \pi/2 \}$.
+We want to solve the Poisson equation on the 3D cartesian domain $[-\pi,\pi]\times[-\pi/2,\pi/2]\times[0,1]$ with Dirichlet and Neumann boundary conditions. Neumann boundary conditions are applied on $\Gamma_{\rm D} = \{ z = 0 \} \cup \{ z = 1 \}$, i.e the bottom and top boundaries. Dirichlet boundary conditions are applied everywhere else, i.e $\Gamma_{\rm D} = \{ x = -\pi \} \cup \{ x = \pi \} \cup \{ y = -\pi/2 \} \cup \{ y = \pi/2 \}$.
 
  Formally, the problem to solve is: find the scalar field $u$ such that
 
@@ -27,7 +17,7 @@ u = g \ &\text{on}\ \Gamma_{\rm D},\\
 \right.
 $$
  being $n$ the outwards unit normal vector to the Neumann boundary $\Gamma_{\rm N}$.
-In this tutorial, we will try to recover an analytical solution $u(x,y,z) = cos(x)*sin(y+π)$ and analyze the convergence rates of our numerical approximation.
+In this tutorial, we will try to recover an analytical solution $u_0(x,y,z) = cos(x)*sin(y+π)$ and analyze the convergence rates of our numerical approximation.
 
  ## Numerical scheme
 
@@ -41,24 +31,34 @@ The implementation of this numerical scheme in Gridap is done in a user-friendly
 
  ## Setup
 
- The step number 0 in order to solve the problem is to load the Gridap library in the code. If you have configured your Julia environment properly, it is simply done with the line:
+ The step number 0 in order to solve the problem is to load the Gridap library in the code. For convenience, we will also be using `DrWatson.jl`. If you have configured your Julia environment properly, it is simply done with the line:
 
 ````julia:ex1
 using Gridap
 using DrWatson
 ````
 
-We define the analytical solution we will try to retrieve as follows
+We define the analytical solution we will try to retrieve as follows:
 
 ````julia:ex2
-u(x) = cos(x[1])*sin(x[2]+π)
+u₀(x)  = cos(x[1])*sin(x[2]+π)
+∇u₀(x) = VectorValue(-sin(x[1])*sin(x[2]+π),cos(x[1])*cos(x[2]+π),0.0)
+Δu₀(x) = -2.0*cos(x[1])*sin(x[2]+π)
+````
+
+We also define the other functions involved in the problem statement:
+
+````julia:ex3
+f(x) = -Δu₀(x)
+g(x) = u₀(x)
+h(x) = 0.0      # ∇u₀ ⋅ n_Γ = ∇u₀ ⋅ ± e₃ = 0
 ````
 
 ## Discrete model
 
 As in any FE simulation, we need a discretization of the computational domain (i.e., a FE mesh). All geometrical data needed for solving a FE problem is provided in Gridap by types inheriting from the abstract type `DiscreteModel`. In our particular case, we will create a `CartesianDiscreteModel` of the computational domain $\Omega = [-\pi,\pi]\times[-\pi/2,\pi/2]\times[0,1]$ with a resolution $n_C=(n_x,n_y,n_z)$
 
-````julia:ex3
+````julia:ex4
 domain = (-π,π,-π/2,π/2,0,1)
 nC     = (100,40,5)
 model  = CartesianDiscreteModel(domain,nC)
@@ -70,22 +70,22 @@ We use this default order to set up the BCs as follows. For convenience, we crea
 
 Gridap provides a convenient way to create new object identifiers (referred to as "tags") from existing ones. First, we need to extract from the model, the object that holds the information about the boundary identifiers (referred to as `FaceLabeling`):
 
-````julia:ex4
+````julia:ex5
 labels = get_face_labeling(model)
 ````
 
 Then, we can add new identifiers (aka "tags") to it. In the next line, we create new tags called `"dirichlet"` and `"neumann"` combining the default labels of the model to represent $\Gamma_D$ and $\Gamma_N$ respectively.
 
-````julia:ex5
-add_tag_from_tags!(labels,"dirichlet",["tag_21","tag_22"])
-add_tag_from_tags!(labels,"neumann",["tag_23","tag_24","tag_25","tag_26"])
+````julia:ex6
+add_tag_from_tags!(labels,"neumann",["tag_21","tag_22"])
+add_tag_from_tags!(labels,"dirichlet",["tag_23","tag_24","tag_25","tag_26"])
 ````
 
 Note the usage of `add_tag_from_tags!` to construct new boundary tags gathering lower-level tags.
 
 ## Approximation spaces
 
-````julia:ex6
+````julia:ex7
 order = 1
 reffe = ReferenceFE(lagrangian,Float64,order)
 V = TestFESpace(model,reffe;conformity=:H1,dirichlet_tags="dirichlet")
@@ -97,8 +97,7 @@ With the key-word argument `conformity` we define the regularity of the interpol
 
 Once the space $V$ is discretized in the code, we proceed with the approximation of the trial space $U$.
 
-````julia:ex7
-g(x) = u(x)
+````julia:ex8
 U = TrialFESpace(V,g)
 ````
 
@@ -109,7 +108,7 @@ To this end, we have used the `TrialFESpace` constructors. Note that we have pas
 
 Once we have built the interpolation spaces, the next step is to set up the machinery to perform the integrals in the weak form numerically. Here, we need to compute integrals on the interior of the domain $\Omega$ and on the Neumann boundary $\Gamma_{\rm N}$. In both cases, we need two main ingredients. We need to define an integration mesh (i.e. a triangulation of the integration domain), plus a Gauss-like quadrature in each of the cells in the triangulation. In Gridap, integration meshes are represented by types inheriting from the abstract type `Triangulation`. For integrating on the domain $\Omega$, we build the following triangulation and the corresponding Lebesgue measure, which will allow to write down integrals in a syntax similar to the usual mathematical notation.
 
-````julia:ex8
+````julia:ex9
 degree = order*2
 Ω  = Triangulation(model)
 dΩ = Measure(Ω,degree)
@@ -119,28 +118,20 @@ Here, we build a triangulation from the cells of the model and build (an approxi
 
 On the other hand, we need a special type of triangulation, represented by the type `BoundaryTriangulation`, to integrate on the boundary. Essentially, a `BoundaryTriangulation` is a particular type of `Triangulation` that is aware of which cells in the model are touched by faces on the boundary. We build an instance of this type from the discrete model and the names used to identify the Neumann boundary as follows:
 
-````julia:ex9
+````julia:ex10
 Γ   = BoundaryTriangulation(model,tags="neumann")
 dΓ  = Measure(Γ,degree)
 ````
 
 In addition, we have created a quadrature of degree 2 on top of the cells in the triangulation for the Neumann boundary.
 
-In order to impose our neumann boundary conditions, we will need to compute the normal vector to the boundary. This is done with the function `get_normal_vector`:
-
-````julia:ex10
-n_Γ = get_normal_vector(Γ)
-````
-
 ## Weak form
 
 With all the ingredients presented so far, we are ready to define the weak form. This is done by defining functions representing the bi-linear and linear forms:
 
 ````julia:ex11
-f(x)   = -Δ(u)(x)
-∇u(x)  = ∇(u)(x)
 a(u,v) = ∫( ∇(v)⋅∇(u) )*dΩ
-l(v)   = ∫( v*f )*dΩ + ∫( v*(∇u⋅n_Γ) )*dΓ
+l(v)   = ∫( v*f )*dΩ + ∫( v*h )*dΓ
 ````
 
 Note that by using the integral function `∫`, the Lebesgue measures `dΩ`, `dΓ`, and the gradient function `∇`, the weak form is written with an obvious relation with the corresponding mathematical notation.
@@ -180,7 +171,7 @@ uh = solve(solver,op)
 The `solve` function returns the computed numerical solution `uh`. This object is an instance of `FEFunction`, the type used to represent a function in a FE space. `FEFunction` is part of the `CellField` abstract type, which are objects that represent fields over a triangulated domain. We can inspect the result by writing it into a `vtk` file:
 
 ````julia:ex16
-writevtk(Ω,datadir("poisson_sol"),cellfields=["uh"=>uh])
+writevtk(Ω,datadir("poisson"),cellfields=["uh"=>uh])
 ````
 
  which will generate a file named `poisson_sol.vtu` having a nodal field named `"uh"` containing the solution of our problem (see next figure).
@@ -190,7 +181,7 @@ writevtk(Ω,datadir("poisson_sol"),cellfields=["uh"=>uh])
 Additionaly, we can compute the L2 error of the numerical solution as follows:
 
 ````julia:ex17
-e = uh - u
+e = uh - u₀
 l2_error = sum(∫(e⋅e)*dΩ)
 ````
 
@@ -210,24 +201,21 @@ function driver(n,order)
   reffe = ReferenceFE(lagrangian,Float64,order)
   V = TestFESpace(model,reffe;conformity=:H1,dirichlet_tags="dirichlet")
 
-  U = TrialFESpace(V,u)
+  U = TrialFESpace(V,g)
   degree = order*2+1
   Ω   = Triangulation(model)
   dΩ  = Measure(Ω,degree)
   Γ   = BoundaryTriangulation(model,tags="neumann")
   dΓ  = Measure(Γ,degree)
-  n_Γ = get_normal_vector(Γ)
 
-  f(x)   = -Δ(u)(x)
-  ∇u(x)  = ∇(u)(x)
   a(u,v) = ∫( ∇(v)⋅∇(u) )*dΩ
-  l(v)   = ∫( v*f )*dΩ + ∫( v*(∇u⋅n_Γ) )*dΓ
+  l(v)   = ∫( v*f )*dΩ + ∫( v*h )*dΓ
   op     = AffineFEOperator(a,l,U,V)
   ls     = LUSolver()
   solver = LinearFESolver(ls)
   uh = solve(solver,op)
 
-  e = uh - u
+  e = uh - u₀
   return sum(∫(e⋅e)*dΩ)
 end
 ````

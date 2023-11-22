@@ -1,2 +1,2 @@
 # This file was generated, do not modify it. # hide
-# Solution for exercise 2
+# Solution for exercise 3

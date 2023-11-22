@@ -1,3 +1,3 @@
 # This file was generated, do not modify it. # hide
-a(u,v) = ∫( (σ∘ε(u)) ⊙ ε(v) )dΩ
-l(v)   = 0
+op = AffineFEOperator(a,l,U,V0)
+uh = solve(op)

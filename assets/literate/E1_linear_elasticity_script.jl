@@ -1,18 +1,17 @@
 # This file was generated, do not modify it.
 
 using Gridap, GridapGmsh
+using DrWatson
+
 msh_file_gmsh = projectdir("meshes/elasticity.msh")
 model = GmshDiscreteModel(msh_file_gmsh)
 
-using Gridap.Io
 msh_file_json = projectdir("meshes/elasticity.json")
 to_json_file(model,msh_file_json)
 
 model = DiscreteModelFromFile(msh_file_json)
 
 writevtk(model,datadir("elasticity_model"))
-
-# Solution for exercise 1
 
 # Solution for exercise 2
 
@@ -51,6 +50,5 @@ l(v)   = 0
 op = AffineFEOperator(a,l,U,V0)
 uh = solve(op)
 
-using DrWatson
 out_file = datadir("elasticity_sol")
 writevtk(Ω,out_file,cellfields=["uh"=>uh,"epsi"=>ε(uh),"sigma"=>σ∘ε(uh)])

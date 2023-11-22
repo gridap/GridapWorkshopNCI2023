@@ -1,2 +1,0 @@
-ArgumentError: Package DrWatson not found in current path.
-- Run `import Pkg; Pkg.add("DrWatson")` to install the DrWatson package.
