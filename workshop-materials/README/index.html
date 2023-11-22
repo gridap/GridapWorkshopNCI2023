@@ -28,7 +28,7 @@
 </ol>
 <h2 id=setting_up_the_environment_on_gadi ><a href="#setting_up_the_environment_on_gadi" class=header-anchor >Setting up the environment on Gadi</a></h2>
 <p>First, we will need to log into Gadi. You will receive an email at some point with an invitation to create an account. At the end of the process, you will get a username and password &#40;which you should change&#41;. If your username is <code>aaa777</code>, you can connect to Gadi by typing</p>
-<pre><code class="bash hljs">ssh aaa777@gadi.nci.org.au</code></pre>
+<pre><code class="bash hljs">ssh -X aaa777@gadi.nci.org.au</code></pre>
 <p>When prompted, enter your password. You should now be logged into Gadi and located in your home directory. We would also recommend setting up passwordless ssh access to Gadi &#40;but it is not required&#41;.</p>
 <p>In addition to your home directory, you have access to a scratch space, a project-wide shared filesystem that is optimized for parallel access. This is where we will be working during the workshop. Start by creating a personal folder within the project&#39;s scratch space and linking it back to your home directory:</p>
 <pre><code class="bash hljs"><span class=hljs-built_in >mkdir</span> /scratch/vp91/<span class=hljs-variable >$USER</span>
