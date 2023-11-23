@@ -1,1 +1,1 @@
-UndefVarError: get_matrix not defined
+UndefVarError: `get_matrix` not defined

@@ -1,1 +1,1 @@
-UndefVarError: CartesianDiscreteModel not defined
+UndefVarError: `CartesianDiscreteModel` not defined
