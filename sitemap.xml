@@ -8,6 +8,12 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/E2_navier_stokes/index.html</loc>
+    <lastmod>2023-11-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://gridap.github.io/GridapWorkshopNCI2023/flyer/index.html</loc>
     <lastmod>2023-11-24</lastmod>
     <changefreq>monthly</changefreq>
@@ -32,12 +38,6 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/E3_transient_stokes/index.html</loc>
-    <lastmod>2023-11-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
     <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/index.html</loc>
     <lastmod>2023-11-24</lastmod>
     <changefreq>monthly</changefreq>
@@ -45,12 +45,6 @@
 </url>
 <url>
     <loc>https://gridap.github.io/GridapWorkshopNCI2023/acks/index.html</loc>
-    <lastmod>2023-11-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/E2_inc_navier_stokes/index.html</loc>
     <lastmod>2023-11-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -99,12 +93,6 @@
 </url>
 <url>
     <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/T1_poisson/index.html</loc>
-    <lastmod>2023-11-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/T2_poisson_distributed/index.html</loc>
     <lastmod>2023-11-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

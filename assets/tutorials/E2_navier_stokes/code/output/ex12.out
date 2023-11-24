@@ -1,0 +1,2 @@
+ArgumentError: Package LineSearches not found in current path.
+- Run `import Pkg; Pkg.add("LineSearches")` to install the LineSearches package.
