@@ -10,9 +10,9 @@ We want to solve the Poisson equation on the 3D cartesian domain $[-\pi,\pi]\tim
 $$
 \left\lbrace
 \begin{aligned}
--\Delta u = f  \ &\text{in} \ \Omega,\\
-u = g \ &\text{on}\ \Gamma_{\rm D},\\
- n \cdot \nabla u = h \ &\text{on}\  \Gamma_{\rm N},\\
+-\Delta u = f  \ &\text{ in } \ \Omega,\\
+u = g \ &\text{ on }\ \Gamma_{\rm D},\\
+ n \cdot \nabla u = h \ &\text{ on }\  \Gamma_{\rm N},\\
 \end{aligned}
 \right.
 $$
