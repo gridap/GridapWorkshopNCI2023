@@ -1,3 +1,6 @@
 # This file was generated, do not modify it. # hide
-num_uniform_refinement_steps=6
-model=OctreeDistributedDiscreteModel(ranks,coarse_model,num_uniform_refinement_steps)
+MPI.Init()
+nprocs = MPI.Comm_size(MPI.COMM_WORLD)
+ranks  = with_mpi() do distribute
+  distribute(LinearIndices((prod(nprocs),)))
+end

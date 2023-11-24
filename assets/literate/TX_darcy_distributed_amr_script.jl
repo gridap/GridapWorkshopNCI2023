@@ -6,8 +6,8 @@ using GridapDistributed
 using GridapP4est
 using MPI
 
-β, r, xc = 100.0, 0.7, VectorValue(-0.05, -0.05)
-p_exact(x) = atan(β * (sqrt((x[1] - xc[1])^2 + (x[2] - xc[2])^2) - r))
+γ, r, xc = 100.0, 0.7, VectorValue(-0.05, -0.05)
+p_exact(x) = atan(γ * (sqrt((x[1] - xc[1])^2 + (x[2] - xc[2])^2) - r))
 u_exact(x) = -∇(p_exact)(x)
 f(x) = (∇⋅u_exact)(x)
 
@@ -62,6 +62,13 @@ function compute_error_darcy(model,degree,xh)
   l2_norm(eu), hdiv_norm(eu), l2_norm(ep)
 end
 
+function get_cell_to_parallel_task(model)
+  model_partition_descriptor=partition(get_cell_gids(model))
+  map(model_partition_descriptor) do indices
+    own_to_owner(indices)
+  end
+end
+
 coarse_model=CartesianDiscreteModel((0,1,0,1),(1,1))
 
 MPI.Init()
@@ -70,7 +77,7 @@ ranks  = with_mpi() do distribute
   distribute(LinearIndices((prod(nprocs),)))
 end
 
-num_uniform_refinement_steps=6
+num_uniform_refinement_steps=4
 model=OctreeDistributedDiscreteModel(ranks,coarse_model,num_uniform_refinement_steps)
 
 function amr_loop(model, order, num_amr_steps, αr, αc;
@@ -91,8 +98,12 @@ function amr_loop(model, order, num_amr_steps, αr, αc;
     if (generate_vtk_files)
        uh,ph = xh
        writevtk(Triangulation(model),
-                "results_amr_step_$(amr_step)",
-                cellfields=["uh"=>uh,"ph"=>ph,"euh"=>u_exact-uh,"eph"=>p_exact-ph])
+                "results_amr_order=$(order)_step_$(amr_step)",
+                cellfields=["uh"=>uh,
+                            "ph"=>ph,
+                            "euh"=>u_exact-uh,
+                            "eph"=>p_exact-ph,
+                            "partition"=>get_cell_to_parallel_task(model)])
     end
 
     # Compute error among finite element solution and exact solution
@@ -104,10 +115,11 @@ function amr_loop(model, order, num_amr_steps, αr, αc;
 
     # Compute error indicators e_K
     uh,ph = xh
+    euh = u_exact-uh
     eph = p_exact-ph
     Ω = Triangulation(model)
     dΩ = Measure(Ω,2*order+1)
-    e_K = map(dc -> sqrt.(get_array(dc)), local_views(∫(eph*eph)dΩ))
+    e_K = map(dc -> sqrt.(get_array(dc)), local_views(∫(euh⋅euh)dΩ))
 
     # Get object which describes how the mesh is partitioned/distributed among parallel tasks
     model_partition_descriptor=partition(get_cell_gids(model))
@@ -135,12 +147,17 @@ function amr_loop(model, order, num_amr_steps, αr, αc;
   model,ndofs_x_level,l2eu_x_level,hdiveu_x_level,l2pe_x_level
 end
 
-order=1
-αr=0.1
+order=0
+αr=0.10
 αc=0.05
-num_amr_steps=4
+num_amr_steps=10
 final_model,ndofss,l2ues,hdivues,l2pes=amr_loop(model, order, num_amr_steps, αr, αc;
                                                 generate_vtk_files=true, redistribute_load=true)
 
-if (MPI.Comm_rank()==0)
+if (MPI.Comm_rank(MPI.COMM_WORLD)==0)
+  using Plots
+  plt = plot(xlabel="ndofs",ylabel="L2 error (fluid velocity)",grid=true)
+  plot!(plt,title="γ=$(γ), r=$(r), center=$(xc)", yaxis=:log10, xaxis=:log10, linewidth=3)
+  plot!(plt,ndofss,l2ues,label="order=$(order) AMR",markershape=:s,markersize=6)
+  savefig(plt, "amr_error_decay_l2eu_order=$(order).pdf" )
 end
