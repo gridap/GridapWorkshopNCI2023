@@ -5,7 +5,7 @@ The goal is to solve a nonlinear multi-field PDE. As a model problem, we conside
 
 The computational domain $\Omega$ is a 2-dimensional channel. The fluid enters the channel from the left boundary (inlet) and exits through the right boundary (outlet). The channel has a cylindrical obstacle near the inlet. The domain can be seen in the following figure:
 <div>
-<img src="../../assets/literate_figures/ins/perforated_plate.png" width="400"/>
+<img src="/assets/literate_figures/ins/perforated_plate.png" width="400"/>
 </div>
 
 We define $\partial \Omega = \Gamma_{w} \cup \Gamma_{c} \cup \Gamma_{in} \cup \Gamma_{out}$ with $\Gamma_{w}$ the top and bottom channel walls, $\Gamma_{c}$ the cylinder walls, $\Gamma_{in}$ the inlet and $\Gamma_{out}$ the outlet.

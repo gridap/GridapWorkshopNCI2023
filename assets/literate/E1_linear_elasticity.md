@@ -3,7 +3,7 @@
 
 We want to solve a linear elasticity problem defined on the 3D domain depicted in next figure.
 
-![](../../assets/literate_figures/elasticity/solid.png)
+![](/assets/literate_figures/elasticity/solid.png)
 
 We impose the following boundary conditions. All components of the displacement vector are constrained to zero on the surface $\Gamma_{\rm G}$, which is marked in green in the figure. On the other hand, the first component of the displacement vector is prescribed to the value $\delta\doteq 5$mm on the surface $\Gamma_{\rm B}$, which is marked in blue. No body or surface forces are included in this example. Formally, the PDE to solve is
 
@@ -170,7 +170,7 @@ _Plot `vh` on the Dirichlet boundaries using `writevtk`_
 
 The plot of the x-component of `vh` should look as follows.
 
-![](../../assets/literate_figures/elasticity/fig_dbc.png)
+![](/assets/literate_figures/elasticity/fig_dbc.png)
 
 _Why do the results at the contour of $\Gamma_{\rm B}$ look weird?_
 
@@ -227,7 +227,7 @@ writevtk(Ω,out_file,cellfields=["uh"=>uh,"epsi"=>ε(uh),"sigma"=>σ∘ε(uh)])
 
 If you plot the deformed displacement in ParaView, it can be clearly observed (see next figure) that the surface $\Gamma_{\rm B}$ is pulled in $x_1$-direction and that the solid deforms accordingly.
 
-![](../../assets/literate_figures/elasticity/disp_ux_40.png)
+![](/assets/literate_figures/elasticity/disp_ux_40.png)
 
 ### Bonus exercise
 

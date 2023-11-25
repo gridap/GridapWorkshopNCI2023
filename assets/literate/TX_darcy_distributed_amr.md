@@ -35,7 +35,7 @@ $$
 Besides, using Darcy's law (i.e., first equation of the system above), we manufacture $u_{\rm exact}=-\Kappa \nabla p_{\rm exact}$.
 
 The solution $p_{\rm exact}(\boldsymbol{x})$ has a sharp circular/spherical wave front of radius $r$ centered at $\boldsymbol{x}_c$. For example, for the combination of parameter values $\gamma=200$, $r=0.7$, and $\boldsymbol{x}_c=(-0.05, -0.05)$, $p_{\rm exact}(\boldsymbol{x})$ looks as in the picture below:
-![](../../assets/literate_figures/darcy_amr/circular_sharp_wave_2d_scaled.png)
+![](/assets/literate_figures/darcy_amr/circular_sharp_wave_2d_scaled.png)
 As consequence of the multi-scale features of this solution, uniform mesh refinement techniques can only reduce the error at a very slow pace with increasing mesh resolution, and thus are very computationally inefficient.
 
 ## Problem statement (weak form)
@@ -63,7 +63,7 @@ In order to support AMR techniques, `GridapP4est.jl` relies on the so-called for
 
 In the case of quadrilateral (2D) or hexahedral (3D) adaptive meshes, the recursive application of the standard isotropic 1:4 (2D) and 1:8 (3D) refinement rule to the coarse mesh cells (i.e., to the adaptive tree roots) leads to adaptive trees that are referred to as quadtrees and octrees, resp., and the data structure resulting from patching them together is called *forest-of-quadtrees* and *-octrees*, resp., although the latter term is typically employed in either case. The figure below shows a forest-of-quadtrees mesh with two quadtrees (i.e., $|\mathcal{C}_h|=2$):
 
-![](../../assets/literate_figures/darcy_amr/forest_of_trees_partition.png)
+![](/assets/literate_figures/darcy_amr/forest_of_trees_partition.png)
 
 Tree-based meshes provide multi-resolution capability by local adaptation. The cells in the mesh (i.e., the leaves of the adaptive trees) might be located at different refinement level.  However, these meshes are (potentially)  *non-conforming*, i.e., they contain the so-called *hanging* vertices, edges, and faces.  These occur at the interface of neighboring cells with different refinement levels. Mesh non-conformity introduces additional complexity in the implementation of conforming finite element formulations [3].  Despite the aforementioned, we note the following. First, the degree of implementation complexity is significantly reduced by enforcing the so-called *2:1 balance* constraint, i.e., adjacent cells may differ at most by a single level of refinement; the $h$-adaptive triangulation in `GridapP4est.jl` always satisfies this constraint. Second, `Gridap` is written such that it is entirely responsible for handling such complexity. As demonstrated in this tutorial, library users are not aware of mesh non-conformity when coding the weak form of the finite element formulation at hand.
 
@@ -75,7 +75,7 @@ Modern forest-of-trees manipulation engines, such as `p4est`, provide a scalable
 
 As an illustration, the figure below shows a 2:1 balanced forest-of-quadtrees mesh with two quadtrees (i.e., $|\mathcal{C}_h|=2$) distributed among two processors, 1:4 refinement and the Morton SFC. Local cells are depicted with continuous boundary lines, while those in the ghost layer with dashed ones.
 
-![](../../assets/literate_figures/darcy_amr/forest_of_trees.png)
+![](/assets/literate_figures/darcy_amr/forest_of_trees.png)
 
 `GridapP4est.jl` reconstructs the local portion of the mesh corresponding to each parallel task from the distributed forest-of-octrees that the `p4est` library handles internally. These local portions are illustrated in the figure above when the forest-of-octrees is distributed among two processors. The local portion of each task is composed by a set of cells that it owns, i.e., the *local cells* of the task, and a set of off-processor cells (owned by remote processors) which are in touch with its local cells, i.e., the *ghost cells* of the task. This overlapped mesh partition is used by the library to exchange data among nearest neighbours, and to glue together the global degrees-of-freedom of the finite element space which are sitting on the interface among subdomains, as required in order to construct finite element spaces for conforming finite element formulations in a distributed setting.
 
