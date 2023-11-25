@@ -76,9 +76,15 @@ for fl in readdir(src_dir)
 end
 
 # copy literate figures
-mkpath("_assets/literate_figures")
+s="_assets/literate_figures"
+if !(isdir(s))
+  mkpath("_assets/literate_figures")
+end
 for subdir in readdir(fig_dir)
-    mkpath("_assets/literate_figures/$subdir")
+    sub="_assets/literate_figures/$subdir"
+    if !(isdir(sub))
+      mkpath("_assets/literate_figures/$subdir")
+    end 
     for file in readdir(string(fig_dir,subdir))
         cp(string(fig_dir,subdir,"/",file), "_assets/literate_figures/$subdir/$file", force=true)
     end
