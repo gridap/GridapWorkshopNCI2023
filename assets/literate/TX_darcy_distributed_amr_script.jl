@@ -147,7 +147,7 @@ function amr_loop(model, order, num_amr_steps, αr, αc;
   model,ndofs_x_level,l2eu_x_level,hdiveu_x_level,l2pe_x_level
 end
 
-order=0
+order=1
 αr=0.10
 αc=0.05
 num_amr_steps=10

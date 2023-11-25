@@ -1,5 +1,5 @@
 # This file was generated, do not modify it. # hide
-order=0
+order=1
 αr=0.10
 αc=0.05
 num_amr_steps=10
