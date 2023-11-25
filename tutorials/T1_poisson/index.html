@@ -49,7 +49,7 @@ solver = LinearFESolver(ls)</code></pre>
 <p>The <code>solve</code> function returns the computed numerical solution <code>uh</code>. This object is an instance of <code>FEFunction</code>, the type used to represent a function in a FE space. <code>FEFunction</code> is part of the <code>CellField</code> abstract type, which are objects that represent fields over a triangulated domain. We can inspect the result by writing it into a <code>vtk</code> file:</p>
 <pre><code class="julia hljs">writevtk(Ω,datadir(<span class=hljs-string >&quot;poisson&quot;</span>),cellfields=[<span class=hljs-string >&quot;uh&quot;</span>=&gt;uh])</code></pre>
 <p>which will generate a file named <code>poisson_sol.vtu</code> having a nodal field named <code>&quot;uh&quot;</code> containing the solution of our problem &#40;see next figure&#41;.</p>
-<p><img src="../_assets/literate_figures/poisson/fig_uh.png" alt="" /></p>
+<p><img src="../../assets/literate_figures/poisson/fig_uh.png" alt="" /></p>
 <p>Additionaly, we can compute the L2 error of the numerical solution as follows:</p>
 <pre><code class="julia hljs">e = uh - u₀
 l2_error = sum(∫(e⋅e)*dΩ)</code></pre>
