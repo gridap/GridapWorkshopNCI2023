@@ -164,7 +164,7 @@ solver &#61; LinearFESolver&#40;ls&#41;</code></pre>
 <p>The <code>solve</code> function returns the computed numerical solution <code>uh</code>. This object is an instance of <code>FEFunction</code>, the type used to represent a function in a FE space. <code>FEFunction</code> is part of the <code>CellField</code> abstract type, which are objects that represent fields over a triangulated domain. We can inspect the result by writing it into a <code>vtk</code> file:</p>
 <pre><code class="language-julia">writevtk&#40;Ω,datadir&#40;&quot;poisson&quot;&#41;,cellfields&#61;&#91;&quot;uh&quot;&#61;&gt;uh&#93;&#41;</code></pre>
 <p>which will generate a file named <code>poisson_sol.vtu</code> having a nodal field named <code>&quot;uh&quot;</code> containing the solution of our problem &#40;see next figure&#41;.</p>
-<p><img src="/assets/literate_figures/poisson/fig_uh.png" alt="" /></p>
+<p><img src="../../assets/literate_figures/poisson/fig_uh.png" alt="" /></p>
 <p>Additionaly, we can compute the L2 error of the numerical solution as follows:</p>
 <pre><code class="language-julia">e &#61; uh - u₀
 l2_error &#61; sum&#40;∫&#40;e⋅e&#41;*dΩ&#41;</code></pre>
@@ -221,7 +221,7 @@ for &#40;i,e&#41; in enumerate&#40;eachrow&#40;error&#41;&#41;
 end
 @show plt</code></pre>
 <p>The resulting plot is shown in the next figure:</p>
-<p><img src="/assets/literate_figures/poisson/convergence.png" alt="" /></p>
+<p><img src="../../assets/literate_figures/poisson/convergence.png" alt="" /></p>
 <p>As expected, we observe a convergence rate of order \(p+1\).</p>
 
 <div class="page-foot">

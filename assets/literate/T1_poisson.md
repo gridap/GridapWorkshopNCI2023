@@ -176,7 +176,7 @@ writevtk(Ω,datadir("poisson"),cellfields=["uh"=>uh])
 
  which will generate a file named `poisson_sol.vtu` having a nodal field named `"uh"` containing the solution of our problem (see next figure).
 
-![](/assets/literate_figures/poisson/fig_uh.png)
+![](../../assets/literate_figures/poisson/fig_uh.png)
 
 Additionaly, we can compute the L2 error of the numerical solution as follows:
 
@@ -252,7 +252,7 @@ end
 
 The resulting plot is shown in the next figure:
 
-![](/assets/literate_figures/poisson/convergence.png)
+![](../../assets/literate_figures/poisson/convergence.png)
 
 As expected, we observe a convergence rate of order $p+1$.
 

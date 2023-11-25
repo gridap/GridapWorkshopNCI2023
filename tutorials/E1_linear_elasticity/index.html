@@ -81,7 +81,7 @@
 <h1 id="linear_elasticity_tutorial"><a href="#linear_elasticity_tutorial" class="header-anchor">Linear Elasticity Tutorial</a></h1>
 <h2 id="problem_statement"><a href="#problem_statement" class="header-anchor">Problem statement</a></h2>
 <p>We want to solve a linear elasticity problem defined on the 3D domain depicted in next figure.</p>
-<p><img src="/assets/literate_figures/elasticity/solid.png" alt="" /></p>
+<p><img src="../../assets/literate_figures/elasticity/solid.png" alt="" /></p>
 <p>We impose the following boundary conditions. All components of the displacement vector are constrained to zero on the surface \(\Gamma_{\rm G}\), which is marked in green in the figure. On the other hand, the first component of the displacement vector is prescribed to the value \(\delta\doteq 5\)mm on the surface \(\Gamma_{\rm B}\), which is marked in blue. No body or surface forces are included in this example. Formally, the PDE to solve is</p>
 \[
 \left\lbrace
@@ -172,7 +172,7 @@ V0    &#61; TestFESpace&#40;model,reffe;
 <p><em>Plot <code>vh</code> on the Dirichlet boundaries using <code>writevtk</code></em></p>
 <pre><code class="language-julia"># Solution for exercise 7</code></pre>
 <p>The plot of the x-component of <code>vh</code> should look as follows.</p>
-<p><img src="/assets/literate_figures/elasticity/fig_dbc.png" alt="" /></p>
+<p><img src="../../assets/literate_figures/elasticity/fig_dbc.png" alt="" /></p>
 <p><em>Why do the results at the contour of \(\Gamma_{\rm B}\) look weird?</em></p>
 <p>The reason is because we are enforcing the Dirichlet values <em>only in the interior</em> of the Dirichlet regions. So, in the contour of \(\Gamma_{\rm B}\) the x-component of the DoF values must be zero. We can use the tag names of the model ending with <code>_c</code> to enforce the Dirichlet conditons on the boundary closure too.</p>
 <h2 id="from_weak_form_to_visualising_the_solution"><a href="#from_weak_form_to_visualising_the_solution" class="header-anchor">From weak form to visualising the Solution</a></h2>
@@ -200,7 +200,7 @@ uh &#61; solve&#40;op&#41;</code></pre>
 <pre><code class="language-julia">out_file &#61; datadir&#40;&quot;elasticity_sol&quot;&#41;
 writevtk&#40;Ω,out_file,cellfields&#61;&#91;&quot;uh&quot;&#61;&gt;uh,&quot;epsi&quot;&#61;&gt;ε&#40;uh&#41;,&quot;sigma&quot;&#61;&gt;σ∘ε&#40;uh&#41;&#93;&#41;</code></pre>
 <p>If you plot the deformed displacement in ParaView, it can be clearly observed &#40;see next figure&#41; that the surface \(\Gamma_{\rm B}\) is pulled in \(x_1\)-direction and that the solid deforms accordingly.</p>
-<p><img src="/assets/literate_figures/elasticity/disp_ux_40.png" alt="" /></p>
+<p><img src="../../assets/literate_figures/elasticity/disp_ux_40.png" alt="" /></p>
 <h3 id="bonus_exercise"><a href="#bonus_exercise" class="header-anchor">Bonus exercise</a></h3>
 <p>Modify this model to solve a multi-material linear elasticity problem as done <a href="https://gridap.github.io/Tutorials/dev/pages/t003_elasticity/#Multi-material-problems-1">here</a>.</p>
 <p><strong>Exercise done&#33;</strong></p>
