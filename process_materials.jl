@@ -60,7 +60,7 @@ end
 
 mkpath(out_dir)
 for fl in readdir(src_dir)
-    if splitext(fl)[end]!=".jl" || fl=="_deploy.jl" || !occursin(incl, fl)
+    if splitext(fl)[end]!=".jl" || fl=="process_materials.jl" || !occursin(incl, fl)
         continue
     end
 
