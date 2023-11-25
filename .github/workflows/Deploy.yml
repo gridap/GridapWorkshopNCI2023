@@ -42,7 +42,6 @@ jobs:
             run(`$(npm_cmd()) install cheerio`);
             using Franklin; serve(single=true); lunr();
             optimize()'
-    - run: find . -name *.png
     - name: Build and Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
