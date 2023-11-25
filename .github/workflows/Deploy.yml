@@ -26,6 +26,8 @@ jobs:
       uses: julia-actions/setup-julia@v1
       with:
         version: 1.9
+    - run: julia -e 'using Pkg; Pkg.activate("."); Pkg.instantiate();'
+    - run: julia --project=. process_materials.jl
     # NOTE
     #   The steps below ensure that NodeJS and Franklin are loaded then it
     #   installs highlight.js which is needed for the prerendering step
@@ -35,11 +37,9 @@ jobs:
     #   The last line should be `optimize()` though you may want to give it
     #   specific arguments, see the documentation or ?optimize in the REPL.
     - run: julia -e '
-            using Pkg; Pkg.activate("."); Pkg.instantiate();
             using NodeJS; run(`$(npm_cmd()) install highlight.js`);
             run(`$(npm_cmd()) install lunr`);
             run(`$(npm_cmd()) install cheerio`);
-            include("process_materials.jl");
             using Franklin; serve(single=true); lunr();
             optimize()'
 
