@@ -10,7 +10,7 @@ out_dir = string(@__DIR__,"/_literate/")
 
 function replace_string(str)
         strn = str
-        for st in ["../figures/" => "../../assets/literate_figures/"]
+        for st in ["../figures/" => "/assets/literate_figures/"]
             strn = replace(strn, st)
         end
     return strn
