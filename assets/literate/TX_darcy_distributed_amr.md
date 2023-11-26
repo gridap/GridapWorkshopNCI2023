@@ -40,7 +40,7 @@ As a consequence of the multi-scale features of this solution, uniform mesh refi
 
 ## Problem statement (weak form)
 
-We denote by $H(\mathrm{div};\Omega)$ the space of vector-valued fields in $\Omega$, whose components and divergence are in $L^2(\Omega)$. With these notation, the weak form  of our problem reads: find $(u,p)\in H(\mathrm{div};\Omega)\times L^2(\Omega)$ such that $a((u,p),(v,q)) = b(v,q)$ for all $(v,q)\in H(\mathrm{div};\Omega)\times L^2(\Omega)$, where
+We denote by $H(\mathrm{div};\Omega)$ the space of vector-valued fields in $\Omega$, whose components and divergence are in $L^2(\Omega)$. With this notation, the weak form  of our problem reads: find $(u,p)\in H(\mathrm{div};\Omega)\times L^2(\Omega)$ such that $a((u,p),(v,q)) = b(v,q)$ for all $(v,q)\in H(\mathrm{div};\Omega)\times L^2(\Omega)$, where
 
 $$
 \begin{aligned}
