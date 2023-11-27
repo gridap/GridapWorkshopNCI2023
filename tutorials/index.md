@@ -4,8 +4,6 @@ title = "Tutorials & Exercises"
 
 # Tutorials & Exercises
 
-:construction: :construction: :construction:  **Page under construction!!!**  :construction: :construction: :construction:
-
 # Day 1
   - [Tutorial 1: Poisson problem](/tutorials/T1_poisson/)
   - [Exercise 1: Linear Elasticity problem](/tutorials/E1_linear_elasticity/)
