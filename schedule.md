@@ -10,7 +10,7 @@ title = "Schedule"
 - 9:10-9:20. Intro to workshop 
 - 9:20-10:00. Overview of Julia
 - 10:00-10:20. Coffee break
-- 10:20-11:20. Intro to FEM
+- 10:20-11:20. [Intro to FEM](/assets/fem-intro-slides.pdf)
 - 11:20-12:00. Tutorial 1: Poisson equation
 - 12:00-12:50. Lunch break
 - 12:50-13:50. Exercise 1: Linear Elasticity
