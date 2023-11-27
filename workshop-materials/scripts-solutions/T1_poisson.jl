@@ -1,5 +1,3 @@
-# This file was generated, do not modify it.
-
 using Gridap
 using DrWatson
 

@@ -26,5 +26,5 @@ function driver(n,order)
 
   dΩe  = Measure(Ω,degree*2)
   e = uh - u₀
-  return sum(∫(e⋅e)*dΩe)
+  return sqrt(sum(∫(e⋅e)*dΩe))
 end
