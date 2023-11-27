@@ -4,7 +4,7 @@ title = "Schedule"
 
 # Schedule 
 
-## Day 1 (27th, Nov)
+## Day 1 (28th, Nov)
 
 - 9:00-9:10. Opening by [Prof. Amanda S. Barnard](https://comp.anu.edu.au/people/amanda-barnard/)
 - 9:10-9:20. Intro to workshop 
@@ -20,7 +20,7 @@ title = "Schedule"
 - 15:10-15:40. Tutorial 4: Stokes problem
 - 15:40-17:00. Exercise 2: Navier-Stokes equations
 
-## Day 2 (28th, Nov) - Tentative
+## Day 2 (29th, Nov) - Tentative
 
 - 9:00-10:00. Exercise 3: Transient Navier-Stokes problem
 - 10:00-10:20. Coffee Break
