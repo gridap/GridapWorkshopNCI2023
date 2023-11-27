@@ -1,5 +1,5 @@
 # This file was generated, do not modify it. # hide
-function compute_error_darcy(model,degree,xh)
+function compute_error_darcy(model,order,xh)
   Ω = Triangulation(model)
   degree = 4*(order+1)
   dΩ = Measure(Ω,degree)

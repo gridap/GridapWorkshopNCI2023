@@ -84,6 +84,7 @@ As an illustration, the figure below shows a 2:1 balanced forest-of-quadtrees me
 We first start as usual by importing the packages we will need:
 
 ````julia:ex1
+using DrWatson
 using Gridap
 using PartitionedArrays
 using GridapDistributed
@@ -144,7 +145,7 @@ At this point you should be already familiar with the steps in the `solve_darcy`
 For convenience, we also define a function to compute the errors among the finite element solution and the exact solution. We will be also using the function at each level of the AMR hierarchy.
 
 ````julia:ex4
-function compute_error_darcy(model,degree,xh)
+function compute_error_darcy(model,order,xh)
   Ω = Triangulation(model)
   degree = 4*(order+1)
   dΩ = Measure(Ω,degree)
@@ -236,23 +237,26 @@ function amr_loop(model, order, num_amr_steps, αr, αc;
   hdiveu_x_level=Float64[]
   l2pe_x_level=Float64[]
 
-  for amr_step=0:num_amr_steps
+  dir = datadir("darcy-amr")
+  i_am_main(ranks) && !isdir(dir) && mkdir(dir)
+  for amr_step = 0:num_amr_steps
     # Solve the finite element problem in the current mesh
-    xh,ndofs=solve_darcy(model,order)
+    xh,ndofs = solve_darcy(model,order)
 
     if (generate_vtk_files)
-       uh,ph = xh
-       writevtk(Triangulation(model),
-                "results_amr_order=$(order)_step_$(amr_step)",
-                cellfields=["uh"=>uh,
-                            "ph"=>ph,
-                            "euh"=>u_exact-uh,
-                            "eph"=>p_exact-ph,
-                            "partition"=>get_cell_to_parallel_task(model)])
+      file  = dir*"/results_amr_order=$(order)_step_$(amr_step)"
+      uh,ph = xh
+      writevtk(Triangulation(model),
+               file,
+               cellfields=["uh"=>uh,
+                           "ph"=>ph,
+                           "euh"=>u_exact-uh,
+                           "eph"=>p_exact-ph,
+                           "partition"=>get_cell_to_parallel_task(model)])
     end
 
     # Compute error among finite element solution and exact solution
-    l2eu,hdiveu,l2ep=compute_error_darcy(model,2*order+1,xh)
+    l2eu,hdiveu,l2ep=compute_error_darcy(model,order,xh)
     append!(l2eu_x_level,l2eu)
     append!(hdiveu_x_level,hdiveu)
     append!(l2pe_x_level,l2ep)
@@ -313,12 +317,16 @@ After execution, the function generates data visualization files plus the L2 and
 As usual, it is helpful to visualize how errors decay with the number of degrees of freedom as the mesh is adapted across several adaptation cycles. The following code generates a plot and writes it into a PDF file in the parallel task with identifier 0.
 
 ````julia:ex11
-if (MPI.Comm_rank(MPI.COMM_WORLD)==0)
+if i_am_main(ranks)
   using Plots
   plt = plot(xlabel="ndofs",ylabel="L2 error (fluid velocity)",grid=true)
   plot!(plt,title="γ=$(γ), r=$(r), center=$(xc)", yaxis=:log10, xaxis=:log10, linewidth=3)
   plot!(plt,ndofss,l2ues,label="order=$(order) AMR",markershape=:s,markersize=6)
-  savefig(plt, "amr_error_decay_l2eu_order=$(order).pdf" )
+
+  dir = datadir("darcy-amr")
+  !isdir(dir) && mkdir(dir)
+  filename = datadir("darcy-amr/amr_error_decay_l2eu_order=$(order).pdf")
+  savefig(plt, filename)
 end
 ````
 

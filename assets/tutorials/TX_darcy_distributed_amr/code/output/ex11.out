@@ -1,1 +1,1 @@
-UndefVarError: `MPI` not defined
+UndefVarError: `i_am_main` not defined
