@@ -54,7 +54,7 @@ julia --project=. -e <span class=hljs-string >&#x27;using Pkg; Pkg.build()&#x27;
 <p>First, we will need to install <code>PackageCompiler</code> package. It does not need to be installed within the project, so just run</p>
 <pre><code class="bash hljs">julia -e <span class=hljs-string >&#x27;using Pkg; Pkg.add(&quot;PackageCompiler&quot;)&#x27;</span></code></pre>
 <p>Next, run the following commands from the <code>/gadi</code> directory to launch a remote job that creates the system image</p>
-<pre><code class="bash hljs">qsub compilation/compile.sh</code></pre>
+<pre><code class="bash hljs">qsub compile/compile.sh</code></pre>
 <p>This will take a while &#40;around 30 mins&#41;, and will create a system image <code>GadiTutorial.so</code> in the <code>/gadi</code> directory. You can see the status of the job by running <code>qstat</code>.</p>
 <p>You can then test this sysimage by running</p>
 <pre><code class="bash hljs">julia --project=. -JGadiTutorial.so compilation/warmup.jl</code></pre>
