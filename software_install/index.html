@@ -10,8 +10,12 @@
 <p>Move into the newly cloned repository and start Julia from the terminal by typing</p>
 <pre><code class="bash hljs">julia --project=.</code></pre>
 <p>Then, press <code>&#93;</code> to enter the package manager and run</p>
-<pre><code class="julia hljs">(GridapWorkshop) pkg&gt; instantiate</code></pre>
+<pre><code class="julia hljs">(GridapWorkshop) pkg&gt; instantiate
+(GridapWorkshop) pkg&gt; update
+(GridapWorkshop) pkg&gt; build</code></pre>
 <p>to install and precompile all the packages needed for the workshop. This may take a while.</p>
+<p>To render Jypyter notebooks interactively, you also need to run the following:</p>
+<pre><code class="bash hljs">julia -e<span class=hljs-string >&#x27;using Pkg; Pkg.add(&quot;IJulia&quot;)&#x27;</span></code></pre>
 <p>More information on Julia Environments can be found <a href="https://pkgdocs.julialang.org/v1/environments/">here</a>.</p>
 <h2 id=setting_up_the_environment_on_your_local_computer_with_vscode ><a href="#setting_up_the_environment_on_your_local_computer_with_vscode" class=header-anchor >Setting up the environment on your local computer with VSCode</a></h2>
 <ol>
@@ -37,7 +41,8 @@
 <pre><code class="bash hljs"><span class=hljs-built_in >source</span> modules.sh</code></pre>
 <p>The script <code>modules.sh</code> has several purposes, and needs to be sourced every time you log in. It loads the Julia module, the Intel-MPI modules, and sets up some environment variables we will need.</p>
 <p>Next, repeat the steps described in the previous section to setup the Julia environment in serial. In addition, you will need to setup the environment for parallel. To do so, run the following commands on the terminal:</p>
-<pre><code class="bash hljs">julia --project=. -e <span class=hljs-string >&#x27;using MPIPreferences; MPIPreferences.use_system_binary()&#x27;</span>
+<pre><code class="bash hljs">julia -e<span class=hljs-string >&#x27;using Pkg; Pkg.add(&quot;MPIPreferences&quot;)&#x27;</span>
+julia --project=. -e <span class=hljs-string >&#x27;using MPIPreferences; MPIPreferences.use_system_binary()&#x27;</span>
 julia --project=. -e <span class=hljs-string >&#x27;using Pkg; Pkg.build()&#x27;</span></code></pre>
 <p>The first line sets up <code>MPI.jl</code> to work with the Intel-MPI binaries installed on Gadi instead of the Julia-specific artifacts. The second line does the same for <code>GridapPETSc.jl</code> and <code>GridapP4est.jl</code>, which are the Gridap wrappers for PETSc and P4est, respectively.</p>
 <h2 id=accessing_to_gadi_using_are_graphical_interface_on_the_web_browser ><a href="#accessing_to_gadi_using_are_graphical_interface_on_the_web_browser" class=header-anchor >Accessing to Gadi using ARE &#40;graphical interface on the web browser&#41;</a></h2>
@@ -48,13 +53,11 @@ julia --project=. -e <span class=hljs-string >&#x27;using Pkg; Pkg.build()&#x27;
 <p>The <code>/gadi/compilation</code> directory contains files that allow us to do just that using <a href="https://julialang.github.io/PackageCompiler.jl/stable/"><code>PackageCompiler.jl</code></a>. Although we will be creating a sysimage &#40;to be used with Julia&#41;, this package also has options to create dynamic libraries &#40;to be used with C/C&#43;&#43;/Fortran&#41; and executables.</p>
 <p>First, we will need to install <code>PackageCompiler</code> package. It does not need to be installed within the project, so just run</p>
 <pre><code class="bash hljs">julia -e <span class=hljs-string >&#x27;using Pkg; Pkg.add(&quot;PackageCompiler&quot;)&#x27;</span></code></pre>
-<p>Next, run the following commands from the <code>/gadi</code> directory to create the system image</p>
-<pre><code class="bash hljs">julia --project=. compilation/compile.jl</code></pre>
-<p>This will take a while &#40;around 5/6 mins&#41;, and will create a system image <code>GadiTutorial.so</code> in the <code>/gadi</code> directory. You can then test this sysimage by running</p>
-<pre><code class="bash hljs">julia --project=. -JGadiTutorial.so compilation/warmup.jl</code></pre>
-<p>Alternatively, we have also provided a BATCH script that creates the system image on a compute node. This is useful if the architecture of the compute nodes is different from the login nodes &#40;for instance, when running on GPU nodes&#41;. It is also good practice to not run heavy computations on the login nodes. To run compile remotely, run</p>
+<p>Next, run the following commands from the <code>/gadi</code> directory to launch a remote job that creates the system image</p>
 <pre><code class="bash hljs">qsub compilation/compile.sh</code></pre>
-<p>You can see the status of the job by running <code>qstat</code>.</p>
+<p>This will take a while &#40;around 30 mins&#41;, and will create a system image <code>GadiTutorial.so</code> in the <code>/gadi</code> directory. You can see the status of the job by running <code>qstat</code>.</p>
+<p>You can then test this sysimage by running</p>
+<pre><code class="bash hljs">julia --project=. -JGadiTutorial.so compilation/warmup.jl</code></pre>
 <div class=page-foot >
   <div class=copyright >
     <a href="https://github.com/gridap/GridapWorkshopNCI2023"><b>Edit this page on <img class=github-logo  src="https://unpkg.com/ionicons@5.1.2/dist/svg/logo-github.svg"></b></a><br>
