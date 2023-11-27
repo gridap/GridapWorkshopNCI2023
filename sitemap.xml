@@ -26,13 +26,13 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://gridap.github.io/GridapWorkshopNCI2023/schedule/index.html</loc>
+    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/T4_stokes/index.html</loc>
     <lastmod>2023-11-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/TX_darcy_distributed_amr/index.html</loc>
+    <loc>https://gridap.github.io/GridapWorkshopNCI2023/schedule/index.html</loc>
     <lastmod>2023-11-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -62,7 +62,19 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/T5_poisson_distributed/index.html</loc>
+    <lastmod>2023-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://gridap.github.io/GridapWorkshopNCI2023/search/index.html</loc>
+    <lastmod>2023-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/T6_darcy_distributed_amr/index.html</loc>
     <lastmod>2023-11-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -92,7 +104,25 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/E3_transient_navier_stokes/index.html</loc>
+    <lastmod>2023-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/T3_p_laplacian/index.html</loc>
+    <lastmod>2023-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/T1_poisson/index.html</loc>
+    <lastmod>2023-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://gridap.github.io/GridapWorkshopNCI2023/tutorials/T2_transient_poisson/index.html</loc>
     <lastmod>2023-11-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
