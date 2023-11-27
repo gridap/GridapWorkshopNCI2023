@@ -8,7 +8,7 @@ title = "Schedule"
 
 - 9:00-9:10. Opening by [Prof. Amanda S. Barnard](https://comp.anu.edu.au/people/amanda-barnard/)
 - 9:10-9:20. Intro to workshop 
-- 9:20-10:00. Overview of Julia
+- 9:20-10:00. [Overview of Julia](/assets/julia-intro-slides.pdf)
 - 10:00-10:20. Coffee break
 - 10:20-11:20. [Intro to FEM](/assets/fem-intro-slides.pdf)
 - 11:20-12:00. Tutorial 1: Poisson equation
