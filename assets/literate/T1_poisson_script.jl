@@ -48,8 +48,9 @@ uh = solve(solver,op)
 
 writevtk(Ω,datadir("poisson"),cellfields=["uh"=>uh])
 
+dΩe  = Measure(Ω,degree*2)
 e = uh - u₀
-l2_error = sum(∫(e⋅e)*dΩ)
+l2_error = sum(∫(e⋅e)*dΩe)
 
 function driver(n,order)
   domain = (-π,π,-π/2,π/2,0,1)
@@ -76,13 +77,14 @@ function driver(n,order)
   solver = LinearFESolver(ls)
   uh = solve(solver,op)
 
+  dΩe  = Measure(Ω,degree*2)
   e = uh - u₀
-  return sum(∫(e⋅e)*dΩ)
+  return sum(∫(e⋅e)*dΩe)
 end
 
 order_vec = [1,2]
 n_vec = [10,20,40,80]
-h_vec = map(n -> (2π/n)*(π/n)*(0.5), n_vec)
+h_vec = map(n -> 1/n, n_vec)
 
 error = zeros((length(order_vec),length(n_vec)))
 for (i,order) in enumerate(order_vec)

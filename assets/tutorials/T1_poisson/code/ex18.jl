@@ -24,6 +24,7 @@ function driver(n,order)
   solver = LinearFESolver(ls)
   uh = solve(solver,op)
 
+  dΩe  = Measure(Ω,degree*2)
   e = uh - u₀
-  return sum(∫(e⋅e)*dΩ)
+  return sum(∫(e⋅e)*dΩe)
 end
