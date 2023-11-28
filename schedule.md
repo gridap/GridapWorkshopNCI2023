@@ -15,7 +15,7 @@ title = "Schedule"
 - 12:00-12:50. Lunch break
 - 12:50-13:50. [Exercise 1: Linear Elasticity](/tutorials/E1_linear_elasticity/)
 - 13:50-14:20. [Tutorial 2: p-Laplacian](/tutorials/T3_p_laplacian/) 
-- 14:20-14:40. [Tutorial 3: Heat Equation](/tutorials/T2_transient_poisson/)
+- 14:20-14:40. **Re-scheduled to Day 2** [Tutorial 3: Heat Equation](/tutorials/T2_transient_poisson/)
 - 14:40-15:10. Coffee Break
 - 15:10-15:40. [Tutorial 4: Stokes problem](/tutorials/T4_stokes/)
 - 15:40-17:00. [Exercise 2: Navier-Stokes equations](/tutorials/E2_navier_stokes/)
@@ -24,7 +24,7 @@ title = "Schedule"
 
 - 9:00-10:00. [Exercise 3: Transient Navier-Stokes problem](/tutorials/E3_transient_navier_stokes/)
 - 10:00-10:20. Coffee Break
-- 10:20-11:20. Parallel distributed-memory computing with Gridap ecosystem
+- 10:20-11:20. [Parallel distributed-memory computing with Gridap ecosystem](/assets/distributed-gridap-slides.pdf)
 - 11:20-12:00. [Parallel Transient Navier-Stokes](/tutorials/E3_transient_navier_stokes/)
 - 12:00-12:50. Lunch break
 - 12:50-14:00. Introduction to Gadi and our first HPC cluster computations
