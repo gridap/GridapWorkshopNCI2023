@@ -7,7 +7,7 @@ title = "Tutorials & Exercises"
 # Day 1
   - [Tutorial 1: Poisson problem](/tutorials/T1_poisson/)
   - [Exercise 1: Linear Elasticity problem](/tutorials/E1_linear_elasticity/)
-  - [Tutorial 2: Transient Poisson problem](/tutorials/T2_transient_poisson/)
+  - **Re-scheduled to Day 2** [Tutorial 2: Transient Poisson problem](/tutorials/T2_transient_poisson/)
   - [Tutorial 3: p-Laplacian problem](/tutorials/T3_p_laplacian/)
   - [Tutorial 4: Stokes problem](/tutorials/T4_stokes/)
   - [Exercise 2: Incompressible Navier-Stokes](/tutorials/E2_navier_stokes/)
