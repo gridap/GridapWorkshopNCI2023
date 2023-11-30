@@ -7,6 +7,11 @@ hascode = false
 
 <!-- \toc -->
 
+## Books and lecture notes
+
+- [Numerical Solution of Partial Differential Equations by the Finite Element Method by Claes Johnson](https://www.amazon.com/Numerical-Solution-Differential-Equations-Mathematics/dp/048646900X)
+- [A gentle introduction to the Finite Element Method by Francisco-Javier Sayas](https://team-pancho.github.io/documents/anIntro2FEM_2015.pdf)
+
 ## Julia lessons
 
 - [William McLean's Julia lessons for beginners](https://web.maths.unsw.edu.au/~mclean/Julia_Lessons/index.html)
@@ -17,10 +22,6 @@ hascode = false
 - [MATLAB-Julia-Python comparative](https://cheatsheets.quantecon.org/) cheatsheet (by [QuantEcon group](https://quantecon.org/))
 - [Plots.jl](https://github.com/sswatson/cheatsheets/blob/master/plotsjl-cheatsheet.pdf) cheatsheet
 
-## Books and lecture notes
-
-- [Numerical Solution of Partial Differential Equations by the Finite Element Method by Claes Johnson](https://www.amazon.com/Numerical-Solution-Differential-Equations-Mathematics/dp/048646900X)
-- [A gentle introduction to the Finite Element Method by Francisco-Javier Sayas](https://team-pancho.github.io/documents/anIntro2FEM_2015.pdf)
 
 ## Extra material 
 
