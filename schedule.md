@@ -20,7 +20,7 @@ title = "Schedule"
 - 15:10-15:40. [Tutorial 4: Stokes problem](/tutorials/T4_stokes/)
 - 15:40-17:00. [Exercise 2: Navier-Stokes equations](/tutorials/E2_navier_stokes/)
 
-## Day 2 (29th, Nov) - Tentative
+## Day 2 (29th, Nov)
 
 - 9:00-10:00. [Exercise 3: Transient Navier-Stokes problem](/tutorials/E3_transient_navier_stokes/)
 - 10:00-10:20. Coffee Break
