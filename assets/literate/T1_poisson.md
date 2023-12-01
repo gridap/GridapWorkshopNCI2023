@@ -178,7 +178,7 @@ writevtk(Ω,datadir("poisson"),cellfields=["uh"=>uh])
 
 ![](/assets/literate_figures/poisson/fig_uh.png)
 
-Additionaly, we can compute the L2 error of the numerical solution as follows:
+Additionally, we can compute the L2 error of the numerical solution as follows:
 
 ````julia:ex17
 dΩe  = Measure(Ω,degree*2)

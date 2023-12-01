@@ -37,13 +37,14 @@ On top of it's mesh-generation functionalities, Gridap provides a convenient way
 
 ````julia:ex1
 using Gridap, GridapGmsh
+using Gridap.Io
 using DrWatson
 
 msh_file_gmsh = projectdir("meshes/elasticity.msh")
 model = GmshDiscreteModel(msh_file_gmsh)
 ````
 
-This model contains the mesh and the physical tags of the model, which have been created directly through `GMSH`. Another option would be to create the model using Gridap, then exporting to `.json` format in the followig way:
+This model contains the mesh and the physical tags of the model, which have been created directly through `GMSH`. Another option would be to create the model using Gridap, then exporting to `.json` format in the following way:
 
 ````julia:ex2
 msh_file_json = projectdir("meshes/elasticity.json")
@@ -174,7 +175,7 @@ The plot of the x-component of `vh` should look as follows.
 
 _Why do the results at the contour of $\Gamma_{\rm B}$ look weird?_
 
-The reason is because we are enforcing the Dirichlet values _only in the interior_ of the Dirichlet regions. So, in the contour of $\Gamma_{\rm B}$ the x-component of the DoF values must be zero. We can use the tag names of the model ending with `_c` to enforce the Dirichlet conditons on the boundary closure too.
+The reason is because we are enforcing the Dirichlet values _only in the interior_ of the Dirichlet regions. So, in the contour of $\Gamma_{\rm B}$ the x-component of the DoF values must be zero. We can use the tag names of the model ending with `_c` to enforce the Dirichlet conditions on the boundary closure too.
 
 ## From weak form to visualising the Solution
 
